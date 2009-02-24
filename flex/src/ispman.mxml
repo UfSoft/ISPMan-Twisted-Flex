@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<isp:ISPMan
+            layout="vertical"
+            label="ISPMan"
+            paddingBottom="5"
+            paddingLeft="5"
+            backgroundColor="#000000"
+            xmlns:mx="http://www.adobe.com/2006/mxml"
+            paddingTop="5"
+            paddingRight="5"
+            backgroundGradientAlphas="[0.6,1.0]"
+            backgroundGradientColors="[0x3D7AB5,0x53718E]"
+            pageTitle="ISPMan"
+            horizontalGap="2"
+            width="100%"
+            height="100%"
+            xmlns:isp="org.ufsoft.ispman.*">
+    <mx:Style>
+        TextArea.console {
+          backgroundColor: "0xCCCCCC";
+          fontSize: 9pt;
+          color: "0x000000";
+        }
+    </mx:Style>
+    <mx:Panel fontStyle="normal" paddingBottom="5" title="ISPMan Control Panel" paddingLeft="5"
+              roundedBottomCorners="true" color="#ffffff" horizontalAlign="center" paddingTop="5"
+              cornerRadius="10" fontSize="12" paddingRight="5" id="main" fontWeight="bold"
+              width="100%" x="0" height="100%" y="0">
+        <mx:HBox>
+            <mx:Button id="foo" label="foo"/>
+            <mx:Button id="logout" label="logout"/>
+        </mx:HBox>
+        <mx:ControlBar>
+            <mx:TextArea id="status_txt" height="50" width="100%" styleName="console"
+                         htmlText="{ log }" textIndent="3" editable="false"
+                         valueCommit="{status_txt.verticalScrollPosition = status_txt.maxVerticalScrollPosition}"/>
+        </mx:ControlBar>
+    </mx:Panel>
+</isp:ISPMan>
