@@ -37,12 +37,16 @@ class ISPManFactory(Site):
             static_files_dir = config.static_files
             for filename in listdir(static_files_dir):
                 filepath = join(static_files_dir, filename)
+                if filename == 'index.html':
+                    filename = ''
                 resource.putChild(filename, File(filepath))
 
         # Add the config files we're supplying
         static_files_dir = join(dirname(__file__), 'static')
         for filename in listdir(static_files_dir):
             filepath = join(static_files_dir, filename)
+            if filename == 'index.html':
+                filename = ''
             resource.putChild(filename, File(filepath))
 
         gateway = TwistedGateway(services, expose_request=False,
@@ -50,7 +54,7 @@ class ISPManFactory(Site):
         gateway.logger = logging.getLogger('ispman.pyamf')
 
         resource.putChild('service', gateway)
-        resource.putChild('', File('/home/vampas/projects/ISPMan/flex/deploy/ispman.swf'))
+#        resource.putChild('', File('/home/vampas/projects/ISPMan/flex/deploy/ispman.swf'))
         Site.__init__(self, resource, logPath, timeout)
         self.config = config
 

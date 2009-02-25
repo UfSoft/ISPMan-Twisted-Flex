@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- myWrapperBuild.xml -->
+<project name="ISPMan Wrapper Builder" basedir=".">
+    <taskdef resource="flexTasks.tasks" classpath="${basedir}/lib/flexTasks.jar"/>
+    <property name="FLEX_HOME" value="/opt/Adobe/SDKs/Flex/3.2.0/"/>
+    <property name="APP_ROOT" value="../"/>
+    <target name="wrapper">
+        <html-wrapper 
+            title="ISPMan Control Panel"
+            file="index.html"
+            height="100%"
+            width="100%"
+            bgcolor="red"
+            application="ispman"
+            swf="ispman"
+            version-major="9"
+            version-minor="0"
+            version-revision="0"
+            history="true"
+            template="express-installation"
+            output="${APP_ROOT}/ispman/static"/>
+    </target>
+    <target name="clean">
+        <delete>
+            <!-- Deletes playerProductInstall.swf -->
+            <fileset dir="${APP_ROOT}/ispman/static" 
+                includes="playerProductInstall.swf" 
+                defaultexcludes="false"/>
+            <!-- Deletes index.html and historyFrame.html -->
+            <fileset dir="${APP_ROOT}/ispman/static" includes="*.html" defaultexcludes="false"/>
+            <!-- Deletes history.css -->
+            <fileset dir="${APP_ROOT}/ispman/static" includes="*.css" defaultexcludes="false"/>
+            <!-- Deletes history.js and AC_OETags.js -->
+            <fileset dir="${APP_ROOT}/ispman/static" includes="*.js" defaultexcludes="false"/>
+        </delete>
+    </target>
+</project>
+

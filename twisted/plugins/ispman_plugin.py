@@ -10,7 +10,7 @@ try:
     from ispman.usage import ISPManService
 except ImportError:
     import sys, os
-    sys.path.insert(0, os.path.join(os.getcwd(), 'python'))
+    sys.path.insert(0, os.path.join(os.getcwd()))
     from ispman.usage import ISPManService
 
 serviceMaker = ISPManService()

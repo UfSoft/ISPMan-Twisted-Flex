@@ -3,7 +3,6 @@
  */
 package org.ufsoft.ispman {
 
-
   import mx.collections.ArrayCollection;
 
   import flash.display.DisplayObject;
@@ -22,6 +21,10 @@ package org.ufsoft.ispman {
   import mx.rpc.events.ResultEvent;
   import mx.rpc.remoting.mxml.RemoteObject;
 
+  import mx.logging.targets.*;
+  import mx.logging.*;
+
+
   import org.ufsoft.ispman.AuthDLG;
   import org.ufsoft.ispman.events.AuthenticationEvent;
 
@@ -31,6 +34,8 @@ package org.ufsoft.ispman {
 
     [Bindable]
     public var log        : String='';
+    private var logger    : ILogger;
+
 
     private var authDialog: Auth
 
@@ -39,18 +44,38 @@ package org.ufsoft.ispman {
     public var foo        : Button;
     public var logout     : Button;
 
-    [ResourceBundle("ISPMan")]
-
-
     [Event(name="AuthenticationNeeded", type="flash.events.Event")]
 
-
     public function ISPMan() {
-      trace("Starting application");
+      initLogging();
+      logger.log(LogEventLevel.INFO, "Starting application");
       super(); // Start Application
       addEventListener( FlexEvent.CREATION_COMPLETE, creationComplete );
-      addEventListener("AuthenticationNeeded", AuthenticationNeeded);
+      addEventListener( "AuthenticationNeeded", AuthenticationNeeded );
     }
+
+    private function initLogging():void {
+      // Create a target.
+      var logTarget:TraceTarget = new TraceTarget();
+
+      // Log only messages for the classes in the mx.rpc.* and
+      // mx.messaging packages.
+      logTarget.filters=[]; //"mx.rpc.*","mx.messaging.*"];
+
+      // Log all log levels.
+      logTarget.level = LogEventLevel.ALL;
+
+      // Add date, time, category, and log level to the output.
+      logTarget.includeDate = true;
+      logTarget.includeTime = true;
+      logTarget.includeCategory = true;
+      logTarget.includeLevel = true;
+
+      // Begin logging.
+      Log.addTarget(logTarget);
+      logger = Log.getLogger("ISPMan");
+    }
+
 
     private function AuthenticationNeeded(event:Event):void {
       authDialog = new AuthDLG();
@@ -80,8 +105,7 @@ package org.ufsoft.ispman {
     }
 
     protected function insertDefaultData_resultHandler(event:ResultEvent):void {
-      event.target.removeEventListener(ResultEvent.RESULT,
-        insertDefaultData_resultHandler);
+      event.target.removeEventListener(ResultEvent.RESULT, insertDefaultData_resultHandler);
       log += event.result.toString() + '\n';
     }
 
@@ -94,8 +118,6 @@ package org.ufsoft.ispman {
 
       // Create a new remote object and set channels
       var remoteObject:RemoteObject = new RemoteObject("ISPManService");
-      //remoteObject.addHeader('TOKEN', token);
-      //remoteObject.setAMFCredentials("foo", "bar");
 
       remoteObject.showBusyCursor = true;
       remoteObject.channelSet = channels;
@@ -128,8 +150,8 @@ package org.ufsoft.ispman {
     }
 
     protected function authenticateFailure (event:FaultEvent):void {
-      Alert.show("Authentication Failed " + event.toString() + '');
-    //dispatchEvent(new Event("AuthenticationNeeded", true));
+      Alert.show("Authentication Failed ");
+      trace(event);
     }
 
     protected function authenticateSuccess (event:ResultEvent):void {
