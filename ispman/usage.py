@@ -10,6 +10,7 @@ from types import ModuleType
 from twisted.plugin import IPlugin
 from twisted.application import internet, service
 from twisted.application.service import IServiceMaker
+from twisted.internet import reactor, defer
 from twisted.python import usage
 from ConfigParser import SafeConfigParser
 
@@ -59,7 +60,8 @@ class ISPManOptions(usage.Options):
             parser.readfp(open(config_file))
         parser.set('ispman', 'here', options.config)
 
-        config.ispman_perl_install = parser.get('ispman', 'ispman_perl_install')
+        config.ispman_perl_install = abspath(parser.get('ispman',
+                                                        'ispman_perl_install'))
         config.static_files = parser.get('ispman', 'static_files')
         config.server_port = parser.getint('ispman', 'server_port')
         config.privatekey_file = parser.get('ispman', 'privatekey_file')
@@ -79,9 +81,25 @@ class ISPManService(object):
         services = service.IServiceCollection(application)
 
         factory = options.getService(options)
-        internet.SSLServer(config.server_port, factory, factory).setServiceParent(services)
-        #internet.SSLServer(843, factory, factory).setServiceParent(services)
 
+#        def init_factory():
+#            factory.init_perl()
+#            internet.SSLServer(config.server_port,
+#                               factory, factory).setServiceParent(services)
+#            return services
+#
+#        def init_failed():
+#            print "Failed to setup Factory"
+#            sys.exit()
+#        deferred = defer.Deferred()
+#        deferred.addCallback(init_factory).addErrback(init_failed)
+##        reactor.callLater(0.1, deferred)
+
+        factory.init_perl()
+        internet.SSLServer(config.server_port,
+                           factory, factory).setServiceParent(services)
+#        #internet.SSLServer(843, factory, factory).setServiceParent(services)
+#
         return services
 
 

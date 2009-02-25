@@ -32,6 +32,7 @@ package org.ufsoft.ispman {
       {label: 'Administrator', type: 1},
       {label: 'Reseller', type: 2},
       {label: 'Client', type: 3},
+      {label: 'Domain', type: 4},
       ]);
 
     public function Auth() {
