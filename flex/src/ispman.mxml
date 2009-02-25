@@ -9,7 +9,7 @@
             paddingTop="5"
             paddingRight="5"
             backgroundGradientAlphas="[0.6,1.0]"
-            backgroundGradientColors="[0x3D7AB5,0x53718E]"
+            backgroundGradientColors="[0x000000,0x323232]"
             pageTitle="ISPMan"
             horizontalGap="2"
             width="100%"
@@ -22,14 +22,26 @@
           color: "0x000000";
         }
     </mx:Style>
-    <mx:Panel fontStyle="normal" paddingBottom="5" title="ISPMan Control Panel" paddingLeft="5"
-              roundedBottomCorners="true" color="#ffffff" horizontalAlign="center" paddingTop="5"
-              cornerRadius="10" fontSize="12" paddingRight="5" id="main" fontWeight="bold"
-              width="100%" x="0" height="100%" y="0">
-        <mx:HBox>
-            <mx:Button id="foo" label="foo"/>
-            <mx:Button id="logout" label="logout"/>
-        </mx:HBox>
+    <mx:Panel
+              title="ISPMan Control Panel"
+              roundedBottomCorners="true"
+              color="0xffffff"
+              borderAlpha="0.15"
+              cornerRadius="10"
+              fontSize="12"
+              paddingTop="2" paddingRight="10" paddingBottom="10" paddingLeft="10"
+              id="mainWindow"
+              fontWeight="bold"
+              height="100%" width="100%"
+              x="0" y="0">
+
+        <mx:VBox>
+            <mx:HBox/>
+            <mx:HBox>
+                <mx:Button id="foo" label="foo"/>
+                <mx:Button id="logout" label="logout"/>
+            </mx:HBox>
+        </mx:VBox>
         <mx:ControlBar>
             <mx:TextArea id="status_txt" height="50" width="100%" styleName="console"
                          htmlText="{ log }" textIndent="3" editable="false"

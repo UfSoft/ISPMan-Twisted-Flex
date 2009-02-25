@@ -34,7 +34,6 @@ package org.ufsoft.ispman {
       {label: 'Client', type: 3},
       ]);
 
-
     public function Auth() {
       super();
       addEventListener( FlexEvent.CREATION_COMPLETE, creationCompleteHandler );
@@ -52,6 +51,7 @@ package org.ufsoft.ispman {
 
       // listen to authenticate button cliks to submit
       authButton.addEventListener( MouseEvent.CLICK, submitForm );
+      password.addEventListener( KeyboardEvent.KEY_DOWN, submitFormEnterKey );
 
       // Set focus on username
       username.setFocus();
@@ -83,6 +83,13 @@ package org.ufsoft.ispman {
       dispatchEvent(new AuthenticationEvent(
         AuthenticationEvent.SEND, username.text, password.text, loginType
         ));
+    }
+
+    private function submitFormEnterKey(evt:KeyboardEvent):void {
+      if ( evt.keyCode == 13 && authButton.enabled ) {
+        dispatchEvent(new AuthenticationEvent(
+          AuthenticationEvent.SEND, username.text, password.text, loginType));
+      }
     }
   }
 

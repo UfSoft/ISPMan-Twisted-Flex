@@ -15,7 +15,8 @@ package org.ufsoft.ispman {
   import mx.managers.PopUpManager;
 
   import mx.messaging.ChannelSet;
-  import mx.messaging.channels.AMFChannel;
+  import mx.messaging.channels.SecureAMFChannel;
+  import mx.resources.ResourceBundle;
   import mx.rpc.AbstractOperation;
   import mx.rpc.events.FaultEvent;
   import mx.rpc.events.ResultEvent;
@@ -29,14 +30,16 @@ package org.ufsoft.ispman {
 
 
     [Bindable]
-    public var log          : String='';
+    public var log        : String='';
 
-    private var dlg:Auth
+    private var authDialog: Auth
 
-    private var token : String='';
+    private var token     : String='';
 
-    public var foo: Button;
-    public var logout: Button;
+    public var foo        : Button;
+    public var logout     : Button;
+
+    [ResourceBundle("ISPMan")]
 
 
     [Event(name="AuthenticationNeeded", type="flash.events.Event")]
@@ -50,9 +53,9 @@ package org.ufsoft.ispman {
     }
 
     private function AuthenticationNeeded(event:Event):void {
-      dlg = new AuthDLG();
-      dlg.addEventListener(AuthenticationEvent.SEND, authenticate);
-      PopUpManager.addPopUp(dlg, DisplayObject(this), true);
+      authDialog = new AuthDLG();
+      authDialog.addEventListener(AuthenticationEvent.SEND, authenticate);
+      PopUpManager.addPopUp(authDialog, DisplayObject(this), true);
     }
 
 
@@ -60,11 +63,6 @@ package org.ufsoft.ispman {
       dispatchEvent(new Event("AuthenticationNeeded", true));
       foo.addEventListener("click", fooc);
       logout.addEventListener("click", logoutc);
-
-    /*var remoteObj:RemoteObject = getService();
-       var operation:AbstractOperation = remoteObj.getOperation('timer.time');
-       operation.addEventListener(ResultEvent.RESULT, insertDefaultData_resultHandler);
-     operation.send();*/
     }
 
     protected function fooc(event:Event):void {
@@ -88,8 +86,8 @@ package org.ufsoft.ispman {
     }
 
     private function getService():RemoteObject {
-      var url     :String = 'http://localhost:8080/service';
-      var channel :AMFChannel = new AMFChannel("pyamf-channel", url);
+      var url    :String = 'https://{server.name}:8443/service';
+      var channel:SecureAMFChannel = new SecureAMFChannel("pyamf-channel", url);
       // Create a channel set and add your channel(s) to it
       var channels:ChannelSet = new ChannelSet();
       channels.addChannel(channel);
@@ -122,7 +120,6 @@ package org.ufsoft.ispman {
     }
 
     protected function authenticate(event:AuthenticationEvent):void {
-      Alert.show("Authenticating with backend server12");
       var remoteObj:RemoteObject = getService();
       var operation:AbstractOperation = remoteObj.getOperation('auth.login');
       operation.addEventListener(FaultEvent.FAULT, authenticateFailure);
@@ -131,12 +128,12 @@ package org.ufsoft.ispman {
     }
 
     protected function authenticateFailure (event:FaultEvent):void {
-      Alert.show("Authentication Failed");
+      Alert.show("Authentication Failed " + event.toString() + '');
     //dispatchEvent(new Event("AuthenticationNeeded", true));
     }
 
     protected function authenticateSuccess (event:ResultEvent):void {
-      PopUpManager.removePopUp(dlg);
+      PopUpManager.removePopUp(authDialog);
       log += event.result.toString() + '\n';
     }
   }

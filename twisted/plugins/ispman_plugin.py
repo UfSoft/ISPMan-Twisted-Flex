@@ -6,7 +6,11 @@
 # License: BSD - Please view the LICENSE file for additional information.
 # ==============================================================================
 
-ISPMAN_NAMESPACE = 'org.ufsoft.ispman'
-ISPMAN_ERRORS_NAMESPACE = 'org.ufsoft.ispman.errors'
+try:
+    from ispman.usage import ISPManService
+except ImportError:
+    import sys, os
+    sys.path.insert(0, os.path.join(os.getcwd(), 'python'))
+    from ispman.usage import ISPManService
 
-__version__ = "0.7"
+serviceMaker = ISPManService()
