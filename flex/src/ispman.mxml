@@ -25,7 +25,6 @@
     <mx:Panel
               title="ISPMan Control Panel"
               roundedBottomCorners="true"
-              color="0xffffff"
               borderAlpha="0.15"
               cornerRadius="10"
               fontSize="12"
@@ -36,16 +35,22 @@
               x="0" y="0">
 
         <mx:VBox>
-            <mx:HBox/>
+            <mx:HBox>
+
+            </mx:HBox>
             <mx:HBox>
                 <mx:Button id="foo" label="foo"/>
                 <mx:Button id="logout" label="logout"/>
             </mx:HBox>
         </mx:VBox>
-        <mx:ControlBar>
-            <mx:TextArea id="status_txt" height="50" width="100%" styleName="console"
-                         htmlText="{ log }" textIndent="3" editable="false"
-                         valueCommit="{status_txt.verticalScrollPosition = status_txt.maxVerticalScrollPosition}"/>
-        </mx:ControlBar>
     </mx:Panel>
+    <mx:ApplicationControlBar width="100%">
+        <mx:VBox>
+            <mx:Button id="logout" label="Logout" width="100%"/>
+            <mx:Button id="ispman_home" label="ISPMan Home"/>
+        </mx:VBox>
+        <mx:TextArea id="status_txt" height="100%" width="100%" styleName="console"
+                     htmlText="{ log }" textIndent="3" editable="false"
+                     valueCommit="{status_txt.verticalScrollPosition = status_txt.maxVerticalScrollPosition}"/>
+    </mx:ApplicationControlBar>
 </isp:ISPMan>

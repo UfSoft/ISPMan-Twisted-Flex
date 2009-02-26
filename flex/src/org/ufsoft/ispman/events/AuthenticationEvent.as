@@ -6,6 +6,7 @@ package org.ufsoft.ispman.events {
 
   public class AuthenticationEvent extends Event {
     public static const SEND    :String = "SendAuthentication";
+    public static const NEEDED  :String = "SendAuthentication";
     public static const SUCESS  :String = "AuthenticationSucessful";
     public static const FAILURE :String = "AuthenticationFailure";
     public var username         :String;
@@ -14,9 +15,9 @@ package org.ufsoft.ispman.events {
 
     public function AuthenticationEvent(
       type      :String,
-      username  :String,
-      password  :String,
-      loginType :int,
+      username  :String = "",
+      password  :String = "",
+      loginType :int    = 1,
       bubbles   :Boolean = true,
       cancelable:Boolean = false
       )

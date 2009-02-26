@@ -8,7 +8,8 @@
 
 
 from os import listdir
-from os.path import dirname, join, isfile, isdir
+from os.path import dirname, join, isdir
+import sys
 
 from OpenSSL import SSL
 
@@ -33,6 +34,7 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 class ISPManFactory(Site):
+    _ispman = _ldap = _ldap_config = None
     def __init__(self, config, logPath=None, timeout=60*60*12):
         resource = self.build_resources(config)
         Site.__init__(self, resource, logPath, timeout)
@@ -46,6 +48,7 @@ class ISPManFactory(Site):
             for filename in listdir(static_files_dir):
                 filepath = join(static_files_dir, filename)
                 if filename == 'index.html':
+                    # Serve index.html from /
                     filename = ''
                 resource.putChild(filename, File(filepath))
 
@@ -74,15 +77,15 @@ class ISPManFactory(Site):
         perl.require('ISPMan')
         perl.require('CGI')
         try:
-            ispman_perl = perl.eval('$ENV{"HTTP_USER_AGENT"} = "PYTHON-CCP"; ' +
+            ispman_perl = perl.eval('$ENV{"HTTP_USER_AGENT"} = "ISPMAN-CCP"; ' +
                                     '$ispman = ISPMan->new() or die "$@"')
-        except Exception, e:
-            print e
-        self.ldap_config = dict(
-            host    = ispman_perl.getConf('ldapHost'),
-            version = ispman_perl.getConf('ldapVersion'),
-            base_dn = ispman_perl.getConf('ldapBaseDN')
-        )
+        except Exception, err:
+            print "Failed to connect to the ISPMan Perl backend:", err
+            sys.exit(1)
+
+        self.ldap_config = dict(host    = ispman_perl.getConf('ldapHost'),
+                                version = ispman_perl.getConf('ldapVersion'),
+                                base_dn = ispman_perl.getConf('ldapBaseDN'))
 
         perl.require('Net::LDAP')
         log.debug('After require LDAP')
@@ -96,10 +99,9 @@ class ISPManFactory(Site):
             print "Failed to connect to LDAP Server: %s" % error
             sys.exit(1)
 
-        self.ldap = lambda: perl.eval(eval_string % (
-            self.ldap_config['host'], self.ldap_config['version']))
-
         log.debug('After LDAP setup')
+        ldap.disconnect()
+        log.debug('LDAP works, disconnecting...')
 
         self.ldap_config['allowed_user_attributes'] = (
             'dn', 'dialupAccess', 'radiusProfileDn', 'uid', 'uidNumber',
@@ -119,14 +121,39 @@ class ISPManFactory(Site):
         self.perl = ispman_perl
         log.debug('ISPMan(perl) Is Now Setup')
 
+    def get_ispman(self):
+        if not self._ispman:
+            self._ispman = perl.eval('$ENV{"HTTP_USER_AGENT"} = "ISPMAN-CCP"; '+
+                                     '$ispman = ISPMan->new() or die "$@"')
+        return self._ispman
+
+    ispman = property(get_ispman)
+
+    def get_ldap(self):
+        if not self._ldap:
+            #perl.require('Net::LDAP')
+            log.debug('Grabbing New LDAP Connection')
+            eval_string = 'Net::LDAP->new( "%s",version => %s ) or die "$@";'
+            log.debug('Eval String: %s', eval_string % (
+                      self.ldap_config['host'], self.ldap_config['version']))
+            try:
+                self._ldap = perl.eval(eval_string % (
+                    self.ldap_config['host'], self.ldap_config['version']))
+            except perl.PerlError, error:
+                print "Failed to connect to LDAP Server: %s" % error
+                sys.exit(1)
+            log.debug('New LDAP Connection retrieved')
+        return self._ldap
+
+    ldap = property(get_ldap)
+
+
     @expose_request
     def preprocessor(self, request, service_request, *args, **kwargs):
         try:
-            request.perl = self.perl
-            request.ldap = self.ldap
-            request.ldap_config = self.ldap_config
             if not request.session:
                 request.getSession()
+            request.factory = self
             if service_request.method == 'login':
                 return
             try:
@@ -134,7 +161,7 @@ class ISPManFactory(Site):
             except AttributeError:
                 raise AuthenticationNeeded
         except Exception, err:
-            print 12345
+            print 123456
             raise err
 
     def getContext(self):

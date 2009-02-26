@@ -44,14 +44,12 @@ package org.ufsoft.ispman {
     public var foo        : Button;
     public var logout     : Button;
 
-    [Event(name="AuthenticationNeeded", type="flash.events.Event")]
-
     public function ISPMan() {
       initLogging();
       logger.log(LogEventLevel.INFO, "Starting application");
       super(); // Start Application
       addEventListener( FlexEvent.CREATION_COMPLETE, creationComplete );
-      addEventListener( "AuthenticationNeeded", AuthenticationNeeded );
+      addEventListener( AuthenticationEvent.NEEDED, AuthenticationNeeded );
     }
 
     private function initLogging():void {
@@ -85,9 +83,9 @@ package org.ufsoft.ispman {
 
 
     private function creationComplete(event:FlexEvent):void {
-      dispatchEvent(new Event("AuthenticationNeeded", true));
+      dispatchEvent(new AuthenticationEvent(AuthenticationEvent.NEEDED));
       foo.addEventListener("click", fooc);
-      logout.addEventListener("click", logoutc);
+      logout.addEventListener("click", doLogout);
     }
 
     protected function fooc(event:Event):void {
@@ -97,11 +95,15 @@ package org.ufsoft.ispman {
       operation.send();
     }
 
-    protected function logoutc(event:Event):void {
+    protected function doLogout(event:Event):void {
       var remoteObj:RemoteObject = getService();
       var operation:AbstractOperation = remoteObj.getOperation('auth.logout');
-      operation.addEventListener(ResultEvent.RESULT, insertDefaultData_resultHandler);
+      operation.addEventListener(ResultEvent.RESULT, doLogoutSucess);
       operation.send();
+    }
+
+    protected function doLogoutSucess(event:ResultEvent):void {
+      dispatchEvent(new AuthenticationEvent(AuthenticationEvent.NEEDED));
     }
 
     protected function insertDefaultData_resultHandler(event:ResultEvent):void {
@@ -122,7 +124,6 @@ package org.ufsoft.ispman {
       remoteObject.showBusyCursor = true;
       remoteObject.channelSet = channels;
       remoteObject.addEventListener(FaultEvent.FAULT, onServiceFault);
-
       return remoteObject;
     }
 
@@ -150,11 +151,13 @@ package org.ufsoft.ispman {
     }
 
     protected function authenticateFailure (event:FaultEvent):void {
+      dispatchEvent(new AuthenticationEvent(AuthenticationEvent.FAILURE));
       Alert.show("Authentication Failed ");
       trace(event);
     }
 
     protected function authenticateSuccess (event:ResultEvent):void {
+      dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SUCESS));
       PopUpManager.removePopUp(authDialog);
       log += event.result.toString() + '\n';
     }
