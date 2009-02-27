@@ -7,6 +7,9 @@ package org.ufsoft.ispman {
 
   import flash.display.DisplayObject;
   import flash.events.Event;
+  import mx.containers.Canvas;
+  import mx.containers.HDividedBox;
+  import mx.containers.VBox;
   import mx.controls.Alert;
   import mx.controls.Button;
   import mx.core.Application;
@@ -26,28 +29,48 @@ package org.ufsoft.ispman {
 
 
   import org.ufsoft.ispman.AuthDLG;
+  import org.ufsoft.ispman.models.AuthenticatedUser;
   import org.ufsoft.ispman.events.AuthenticationEvent;
+
+  // Modules Management
+  import mx.modules.ModuleLoader;
+  import mx.modules.ModuleManager;
+  import mx.modules.IModuleInfo;
+  import mx.events.ModuleEvent;
+
+  // Class Alias
+  import flash.net.registerClassAlias;
 
 
   public class ISPMan extends Application {
 
-
     [Bindable]
     public var log        : String='';
     private var logger    : ILogger;
+    private var authDialog: Auth;
+    private var user      : AuthenticatedUser;
 
 
-    private var authDialog: Auth
-
-    private var token     : String='';
-
+    public var mainWindow : VBox;
+    public var mainBox    : HDividedBox;
     public var foo        : Button;
+    public var foo1       : Button;
+    public var foo2       : Button;
     public var logout     : Button;
 
+    // Modules
+    public var overviewModule :  IModuleInfo;
+    public var overviewModule1:  IModuleInfo;
+
+    public var mainWinModuleLoader: ModuleLoader;
+
     public function ISPMan() {
-      initLogging();
-      logger.log(LogEventLevel.INFO, "Starting application");
       super(); // Start Application
+      //initLogging();
+      //logger.log(LogEventLevel.INFO, "Starting application");
+      // These mappings must use the same aliases defined with the PyAMF
+      // function 'pyamf.register_class'.
+      registerClassAlias(AuthenticatedUser.ALIAS, AuthenticatedUser);
       addEventListener( FlexEvent.CREATION_COMPLETE, creationComplete );
       addEventListener( AuthenticationEvent.NEEDED, AuthenticationNeeded );
     }
@@ -74,6 +97,15 @@ package org.ufsoft.ispman {
       logger = Log.getLogger("ISPMan");
     }
 
+    private function creationComplete(event:FlexEvent):void {
+      dispatchEvent(new AuthenticationEvent(AuthenticationEvent.NEEDED));
+      //foo.addEventListener("click", fooc);
+      //foo.addEventListener("click", loadModules);
+      foo1.addEventListener("click", loadModules1);
+      foo2.addEventListener("click", fooc);
+      logout.enabled = false;
+    }
+
 
     private function AuthenticationNeeded(event:Event):void {
       authDialog = new AuthDLG();
@@ -81,18 +113,27 @@ package org.ufsoft.ispman {
       PopUpManager.addPopUp(authDialog, DisplayObject(this), true);
     }
 
-
-    private function creationComplete(event:FlexEvent):void {
-      dispatchEvent(new AuthenticationEvent(AuthenticationEvent.NEEDED));
-      foo.addEventListener("click", fooc);
-      logout.addEventListener("click", doLogout);
+    protected function authenticate(event:AuthenticationEvent):void {
+      this.user = event.user;
+      var remoteObj:RemoteObject = getService();
+      var operation:AbstractOperation = remoteObj.getOperation('auth.login');
+      operation.addEventListener(FaultEvent.FAULT, authenticateFailure);
+      operation.addEventListener(ResultEvent.RESULT, authenticateSuccess);
+      operation.send(event.user);
     }
 
-    protected function fooc(event:Event):void {
-      var remoteObj:RemoteObject = getService();
-      var operation:AbstractOperation = remoteObj.getOperation('timer.time');
-      operation.addEventListener(ResultEvent.RESULT, insertDefaultData_resultHandler);
-      operation.send();
+    protected function authenticateFailure (event:FaultEvent):void {
+      dispatchEvent(new AuthenticationEvent(AuthenticationEvent.FAILURE));
+      var errorMsg:String = "Authentication Failed " + event.fault.faultCode;
+      Alert.show(event.fault.faultDetail, errorMsg);
+    }
+
+    protected function authenticateSuccess (event:ResultEvent):void {
+      dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SUCESS));
+      logout.addEventListener("click", doLogout);
+      logout.enabled = true;
+      PopUpManager.removePopUp(authDialog);
+      log += event.result.toString() + '\n';
     }
 
     protected function doLogout(event:Event):void {
@@ -104,6 +145,38 @@ package org.ufsoft.ispman {
 
     protected function doLogoutSucess(event:ResultEvent):void {
       dispatchEvent(new AuthenticationEvent(AuthenticationEvent.NEEDED));
+      logout.enabled = false;
+    }
+
+    private function loadModule(ml:ModuleLoader, url:String):void {
+      if ( !ml.url ) {
+        ml.url = url;
+        return;
+      }
+      ml.loadModule()
+    }
+
+    private function loadModules1(event:Event=null): void {
+      Alert.show("Trying to load modules 1");
+      overviewModule1 = ModuleManager.getModule('https://lgl:8443/module/overview2.swf');
+      overviewModule1.addEventListener(ModuleEvent.READY, moduleLoaded);
+      overviewModule1.addEventListener(ModuleEvent.ERROR, moduleLoadedError);
+      overviewModule1.load()
+      Alert.show("Trying to load modules 1- Ended;");
+    }
+
+    private function moduleLoaded(event:ModuleEvent): void {
+      mainWindow.addChild(overviewModule.factory.create() as DisplayObject);
+      Alert.show("Module should be inserted by now");
+    }
+
+    private function moduleLoadedError(event:ModuleEvent): void {
+      Alert.show("Error loading module.");
+      log += event.toString() + '\n';
+    }
+
+    protected function fooc(event:Event):void {
+      loadModule(mainWinModuleLoader, 'https://lgl:8443/module/overview2.swf');
     }
 
     protected function insertDefaultData_resultHandler(event:ResultEvent):void {
@@ -140,26 +213,6 @@ package org.ufsoft.ispman {
         var errorMsg:String = event.fault.faultCode;
         Alert.show(event.fault.faultDetail, errorMsg);
       }
-    }
-
-    protected function authenticate(event:AuthenticationEvent):void {
-      var remoteObj:RemoteObject = getService();
-      var operation:AbstractOperation = remoteObj.getOperation('auth.login');
-      operation.addEventListener(FaultEvent.FAULT, authenticateFailure);
-      operation.addEventListener(ResultEvent.RESULT, authenticateSuccess);
-      operation.send(event.username, event.password, event.loginType);
-    }
-
-    protected function authenticateFailure (event:FaultEvent):void {
-      dispatchEvent(new AuthenticationEvent(AuthenticationEvent.FAILURE));
-      Alert.show("Authentication Failed ");
-      trace(event);
-    }
-
-    protected function authenticateSuccess (event:ResultEvent):void {
-      dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SUCESS));
-      PopUpManager.removePopUp(authDialog);
-      log += event.result.toString() + '\n';
     }
   }
 }

@@ -18,6 +18,7 @@ package org.ufsoft.ispman {
   import flash.events.MouseEvent;
 
   import org.ufsoft.ispman.events.AuthenticationEvent;
+  import org.ufsoft.ispman.models.AuthenticatedUser;
   import mx.collections.ArrayCollection;
 
   public class Auth extends TitleWindow {
@@ -65,11 +66,6 @@ package org.ufsoft.ispman {
       loginType = ComboBox(event.target).selectedItem.type;
     }
 
-
-    private function authWin_close(evt:CloseEvent):void {
-      PopUpManager.removePopUp(evt.target as IFlexDisplayObject);
-    }
-
     // Function to check if the authentication button should be enabled ot not
     private function submit_Ok(evt:KeyboardEvent):void {
       if ( password.text.length > 0 && username.text.length > 0) {
@@ -81,15 +77,14 @@ package org.ufsoft.ispman {
 
     // Fire the submit form event
     private function submitForm(evt:MouseEvent):void {
-      dispatchEvent(new AuthenticationEvent(
-        AuthenticationEvent.SEND, username.text, password.text, loginType
-        ));
+      var user:AuthenticatedUser = new AuthenticatedUser(username.text, password.text, loginType);
+      dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SEND, user));
     }
 
     private function submitFormEnterKey(evt:KeyboardEvent):void {
       if ( evt.keyCode == 13 && authButton.enabled ) {
-        dispatchEvent(new AuthenticationEvent(
-          AuthenticationEvent.SEND, username.text, password.text, loginType));
+        var user:AuthenticatedUser = new AuthenticatedUser(username.text, password.text, loginType);
+        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SEND, user));
       }
     }
   }

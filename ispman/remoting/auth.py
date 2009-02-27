@@ -9,6 +9,9 @@ import logging
 from twisted.internet.threads import deferToThread, defer
 from pyamf.remoting.gateway import expose_request
 from ispman.remoting import UnprotectedResource
+from ispman.models.auth import AuthenticatedUser
+
+import pyamf
 
 ROLES = (ROLE_ADMIN, ROLE_RESELLER, ROLE_CLIENT, ROLE_DOMAIN) = range(1, 5)
 
@@ -23,29 +26,32 @@ class AuthenticationNeeded(Exception):
 
 class Authentication(UnprotectedResource):
 
-    @utf8
+
     @expose_request
-    def login(self, request, username, password, login_type):
+    def login(self, request, user):
         def failure(exception):
             raise AuthenticationNeeded#
-        d = deferToThread(self._login, request, username, password, login_type)
+        d = deferToThread(self._login, request,
+                          AuthenticatedUser(*user.values()))
         d.addErrback(failure)
         return d
+#        return self._login(request, AuthenticatedUser(*user.values()))
 
-    def _login(self, request, username, password, login_type):
+    def _login(self, request, user):
+
         ldap = request.factory.ldap
         ldap_config = request.factory.ldap_config
-        if login_type == ROLE_DOMAIN:
+        if user.login_type == ROLE_DOMAIN:
             base_bind_dn = 'ispmanDomain=%s,%%s' % ldap_config['base_dn']
             bind_dn = base_bind_dn % username
-        elif login_type in (ROLE_CLIENT, ROLE_RESELLER):
+        elif user.login_type in (ROLE_CLIENT, ROLE_RESELLER):
             base_dn = "ou=ispman,%s" % ldap_config['base_dn']
-            filter_base = "&(objectClass=%%s)(uid=%s)" % username
+            filter_base = "&(objectClass=%%s)(uid=%s)" % user.username
             log.debug('Base DN: %s', base_dn)
-            if login_type == ROLE_CLIENT:
+            if user.login_type == ROLE_CLIENT:
                 scope  = "sub"
                 ldap_filter = filter_base % "ispmanClient"
-            elif login_type == ROLE_RESELLER:
+            elif user.login_type == ROLE_RESELLER:
                 scope  = "one"
                 ldap_filter = filter_base % "ispmanReseller"
 
@@ -60,18 +66,18 @@ class Authentication(UnprotectedResource):
                 raise AuthenticationNeeded
             log.debug("entry returned: %s", entry)
             bind_dn = entry.dn()
-        elif login_type == ROLE_ADMIN:
-            bind_dn = "uid=%s,ou=admins,%s" % (username,
+        elif user.login_type == ROLE_ADMIN:
+            bind_dn = "uid=%s,ou=admins,%s" % (user.username,
                                                ldap_config['base_dn'])
         # Authenticate
-        result =  ldap.bind(bind_dn, password=password)
+        result =  ldap.bind(bind_dn, password=user.password)
         if result.code():
             log.debug('Failed to login')
             ldap.unbind()
             ldap.disconnect()
             raise AuthenticationNeeded
 
-        log.debug('login OK for user "%s"', username)
+        log.debug('login OK for user "%s"', user.username)
         request.session.authenticated = True
         ldap.unbind()
         ldap.disconnect()

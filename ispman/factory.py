@@ -17,14 +17,20 @@ from twisted.web.resource import Resource
 from twisted.web.server import Site
 from twisted.web.static import File
 
+import pyamf
+from pyamf import amf3
 from pyamf.remoting.gateway import expose_request
 from pyamf.remoting.gateway.twisted import TwistedGateway
 
 from ispman.services import services
 from ispman.remoting.auth import AuthenticationNeeded
+# ISPMan Models
+from ispman.models.auth import AuthenticatedUser
 
 import logging
 import perl
+
+ISPMAN_AS_NAMESPACE = 'org.ufsoft.ispman'
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -39,6 +45,16 @@ class ISPManFactory(Site):
         resource = self.build_resources(config)
         Site.__init__(self, resource, logPath, timeout)
         self.config = config
+
+
+    def setup_pyamf(self):
+        # Setup PyAMF
+        # Set this to true so that returned objects and arrays are bindable
+        MODELS_NAMESPACE = "%s.models" % ISPMAN_AS_NAMESPACE
+        amf3.use_proxies_default = True
+        #
+        pyamf.register_class(
+            AuthenticatedUser, "%s.AuthenticatedUser" % MODELS_NAMESPACE)
 
     def build_resources(self, config):
         resource = Resource()
@@ -62,7 +78,7 @@ class ISPManFactory(Site):
 
         gateway = TwistedGateway(services, expose_request=False,
                                  preprocessor=self.preprocessor)
-        #gateway.logger = logging.getLogger('ispman.pyamf')
+        gateway.logger = logging.getLogger('ispman.pyamf')
         resource.putChild('service', gateway)
         return resource
 
@@ -144,12 +160,12 @@ class ISPManFactory(Site):
                 sys.exit(1)
             log.debug('New LDAP Connection retrieved')
         return self._ldap
-
     ldap = property(get_ldap)
 
 
     @expose_request
     def preprocessor(self, request, service_request, *args, **kwargs):
+        print '\n\n\n Preprocess', args, kwargs
         try:
             if not request.session:
                 request.getSession()
