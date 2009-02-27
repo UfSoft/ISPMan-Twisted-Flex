@@ -35,9 +35,8 @@
             <mx:Button id="foo1" label="foo1"/>
             <mx:Button id="foo2" label="foo2"/>
         </mx:Panel>
-        <mx:VBox id="mainWindow" width="80%" height="100%">
-            <mx:ModuleLoader id="mainWinModuleLoader"/>
-        </mx:VBox>
+        <mx:VDividedBox id="mainWindow" width="100%" height="100%" cornerRadius="5">
+        </mx:VDividedBox>
     </mx:HDividedBox>
     <mx:ApplicationControlBar width="100%">
         <mx:VBox>

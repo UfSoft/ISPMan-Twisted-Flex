@@ -9,7 +9,7 @@ package org.ufsoft.ispman {
   import flash.events.Event;
   import mx.containers.Canvas;
   import mx.containers.HDividedBox;
-  import mx.containers.VBox;
+  import mx.containers.VDividedBox;
   import mx.controls.Alert;
   import mx.controls.Button;
   import mx.core.Application;
@@ -51,7 +51,7 @@ package org.ufsoft.ispman {
     private var user      : AuthenticatedUser;
 
 
-    public var mainWindow : VBox;
+    public var mainWindow : VDividedBox;
     public var mainBox    : HDividedBox;
     public var foo        : Button;
     public var foo1       : Button;
@@ -101,9 +101,10 @@ package org.ufsoft.ispman {
       dispatchEvent(new AuthenticationEvent(AuthenticationEvent.NEEDED));
       //foo.addEventListener("click", fooc);
       //foo.addEventListener("click", loadModules);
-      foo1.addEventListener("click", loadModules1);
+      foo1.addEventListener("click", fooc1);
       foo2.addEventListener("click", fooc);
       logout.enabled = false;
+      mainWinModuleLoader = new ModuleLoader();
     }
 
 
@@ -140,6 +141,7 @@ package org.ufsoft.ispman {
       var remoteObj:RemoteObject = getService();
       var operation:AbstractOperation = remoteObj.getOperation('auth.logout');
       operation.addEventListener(ResultEvent.RESULT, doLogoutSucess);
+      operation.addEventListener(FaultEvent.FAULT, onServiceFault);
       operation.send();
     }
 
@@ -153,7 +155,16 @@ package org.ufsoft.ispman {
         ml.url = url;
         return;
       }
+      ml.addEventListener(ModuleEvent.READY, moduleLoaded);
+      ml.addEventListener(ModuleEvent.ERROR, moduleLoadedError);
       ml.loadModule()
+    }
+
+    public function unloadModule(ml:ModuleLoader):void {
+      if ( !ml.url ) {
+        return;
+      }
+      ml.unloadModule();
     }
 
     private function loadModules1(event:Event=null): void {
@@ -166,7 +177,7 @@ package org.ufsoft.ispman {
     }
 
     private function moduleLoaded(event:ModuleEvent): void {
-      mainWindow.addChild(overviewModule.factory.create() as DisplayObject);
+      mainWindow.addChild(event.module.factory.create() as DisplayObject);
       Alert.show("Module should be inserted by now");
     }
 
@@ -176,7 +187,12 @@ package org.ufsoft.ispman {
     }
 
     protected function fooc(event:Event):void {
+      unloadModule(mainWinModuleLoader);
       loadModule(mainWinModuleLoader, 'https://lgl:8443/module/overview2.swf');
+    }
+    protected function fooc1(event:Event):void {
+      unloadModule(mainWinModuleLoader);
+      loadModule(mainWinModuleLoader, 'https://lgl:8443/module/overview.swf');
     }
 
     protected function insertDefaultData_resultHandler(event:ResultEvent):void {
