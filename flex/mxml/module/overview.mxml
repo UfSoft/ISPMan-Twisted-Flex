@@ -2,15 +2,16 @@
 <modules:OverviewModule xmlns:mx="http://www.adobe.com/2006/mxml"
                         xmlns:modules="org.ufsoft.ispman.modules.*"
                         width="100%" height="100%">
-    <mx:Panel title="Overview" roundedBottomCorners="true"
-              borderAlpha="0.15"
-              cornerRadius="10"
-              fontSize="12"
-              paddingTop="2" paddingRight="10" paddingBottom="10" paddingLeft="10"
-              id="actionsPanel"
-              fontWeight="bold"
-              height="100%" width="80%"
-              color="0xffffff">
+    <mx:TitleWindow title="Overview" roundedBottomCorners="true"
+                    borderAlpha="0.15"
+                    cornerRadius="10"
+                    fontSize="12"
+                    paddingTop="2" paddingRight="10" paddingBottom="10" paddingLeft="10"
+                    id="actionsPanel"
+                    fontWeight="bold"
+                    height="100%" width="80%"
+                    color="0xffffff"
+                    showCloseButton="true">
         <mx:Button label="Foo Bar"></mx:Button>
-    </mx:Panel>
+    </mx:TitleWindow>
 </modules:OverviewModule>

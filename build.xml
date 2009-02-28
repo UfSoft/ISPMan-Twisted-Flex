@@ -120,18 +120,32 @@
   </target>
 
   <target name="compile" depends="setup">
-    <echo message="${FLEX_HOME}" />
+    <echo message="Compile the main app and it's modules" />
     <!-- compile main mxml file -->
+    <antcall target="app"/>
+
+    <!-- compile optimize modules. The module are optimize using Main file-->
+    <antcall target="modules"/>
+
+    <!-- compile main mxml file
+    <echo message="${FLEX_HOME}" />
     <compile_flex_app src-file="${APP_MAIN}"
                       out-file="${DEPLOY_DIR}/${project.filename}.swf"
                       use-network="true" />
 
-    <!-- compile optimize modules. The module are optimize using Main file-->
+
     <compile_flex_module modules="${APP_ROOT}/module"
                          use-network="true"
-                         out-dir="${DEPLOY_DIR}/module/" />
+                         out-dir="${DEPLOY_DIR}/module/" /> -->
   </target>
 
+  <target name="app" depends="setup">
+      <echo message="${FLEX_HOME}" />
+      <!-- compile main mxml file -->
+      <compile_flex_app src-file="${APP_MAIN}"
+                        out-file="${DEPLOY_DIR}/${project.filename}.swf"
+                        use-network="true" />
+  </target>
   <target name="modules" depends="setup">
     <echo message="${FLEX_HOME}" />
     <!-- compile optimize modules. The module are optimize using Main file-->

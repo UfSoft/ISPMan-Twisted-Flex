@@ -30,7 +30,7 @@ class Authentication(UnprotectedResource):
     @expose_request
     def login(self, request, user):
         def failure(exception):
-            raise AuthenticationNeeded#
+            raise AuthenticationNeeded
         d = deferToThread(self._login, request,
                           AuthenticatedUser(*user.values()))
         d.addErrback(failure)
@@ -87,4 +87,8 @@ class Authentication(UnprotectedResource):
     def logout(self, request):
         request.session.expire()
         return 'Logged Out'
+
+    @expose_request
+    def overview(self, request):
+        pass
 
