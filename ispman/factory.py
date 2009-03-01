@@ -58,7 +58,16 @@ class ISPManFactory(Site):
 
     def build_resources(self, config):
         resource = Resource()
-        # Add any xml config files to our resources
+
+        # Add the config/static files we're supplying
+        static_files_dir = join(dirname(__file__), 'static')
+        for filename in listdir(static_files_dir):
+            filepath = join(static_files_dir, filename)
+            if filename == 'index.html':
+                filename = ''
+            resource.putChild(filename, File(filepath))
+
+        # Override with the files the user provide from it's dir
         if isdir(config.static_files):
             static_files_dir = config.static_files
             for filename in listdir(static_files_dir):
@@ -67,14 +76,6 @@ class ISPManFactory(Site):
                     # Serve index.html from /
                     filename = ''
                 resource.putChild(filename, File(filepath))
-
-        # Add the config files we're supplying
-        static_files_dir = join(dirname(__file__), 'static')
-        for filename in listdir(static_files_dir):
-            filepath = join(static_files_dir, filename)
-            if filename == 'index.html':
-                filename = ''
-            resource.putChild(filename, File(filepath))
 
         gateway = TwistedGateway(services, expose_request=False,
                                  preprocessor=self.preprocessor)

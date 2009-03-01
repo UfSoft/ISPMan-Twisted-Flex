@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                layout="vertical"
+                isPopUp="false"
+                creationComplete="creationComplete(event)"
+                title="Authentication Required">
+    <mx:Script>
+      import mx.events.FlexEvent;
+      import mx.managers.PopUpManager;
+      import mx.collections.ArrayCollection;
+
+      import mx.events.FlexEvent;
+
+      import org.ufsoft.ispman.models.AuthenticatedUser;
+      import org.ufsoft.ispman.events.AuthenticationEvent;
+
+      public var loginType  : int=1;
+
+      [Bindable]
+      public var loginTypeArray:ArrayCollection = new ArrayCollection([
+        {label: 'Administrator', type: 1},
+        {label: 'Reseller', type: 2},
+        {label: 'Client', type: 3},
+        {label: 'Domain', type: 4},
+      ]);
+
+      protected function creationComplete( event:FlexEvent ):void {
+        PopUpManager.centerPopUp(this); // center the popup
+
+        // Listen to key events to enable or not the authenticate button
+        this.addEventListener(KeyboardEvent.KEY_UP, submit_Ok);
+
+        // listen to login type changes
+        loginTypeCombo.addEventListener("change", loginTypeSelect);
+
+        // listen to authenticate button cliks to submit
+        authButton.addEventListener( MouseEvent.CLICK, submitForm );
+        password.addEventListener( KeyboardEvent.KEY_DOWN, submitFormEnterKey );
+
+        // Set focus on username
+        username.setFocus();
+      }
+
+      /*
+       * Function to change the login type
+       */
+      private function loginTypeSelect(event:Event):void {
+        loginType = ComboBox(event.target).selectedItem.type;
+      }
+
+      // Function to check if the authentication button should be enabled or not
+      private function submit_Ok(evt:KeyboardEvent):void {
+        if ( password.text.length > 0 &amp;&amp; username.text.length > 0) {
+          authButton.enabled = true;
+        } else {
+          authButton.enabled = false;
+        }
+      }
+
+      // Fire the submit form event
+      private function submitForm(evt:MouseEvent):void {
+        var user:AuthenticatedUser = new AuthenticatedUser(username.text, password.text, loginType);
+        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SEND, user));
+      }
+
+      private function submitFormEnterKey(evt:KeyboardEvent):void {
+        if ( evt.keyCode == 13 &amp;&amp; authButton.enabled ) {
+        var user:AuthenticatedUser = new AuthenticatedUser(username.text, password.text, loginType);
+        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SEND, user));
+        }
+      }
+    </mx:Script>
+
+    <mx:Form>
+        <mx:FormItem id="usernameItem" label="Username:">
+            <mx:TextInput id="username"/>
+        </mx:FormItem>
+        <mx:FormItem id="passwordItem" label="Password:">
+            <mx:TextInput id="password" displayAsPassword="true"/>
+        </mx:FormItem>
+        <mx:FormItem id="loginTypeItem" label="Login as:">
+            <mx:ComboBox id="loginTypeCombo" dataProvider="{loginTypeArray}"
+                         labelField="label" change="loginTypeSelect(event)"/>
+        </mx:FormItem>
+        <mx:Button label="Authenticate" id ="authButton" enabled="false" width="100%"/>
+        <mx:TextArea width="100%" height="100" textAlign="justify" condenseWhite="true">
+            <mx:htmlText><![CDATA[
+                <b><p>This system is for the use of authorized users only.
+                Individuals using this computer system without authority, or
+                in excess of their authority, are subject to having all of
+                their activities on this system monitored and recorded.</p>
+
+                <p>In the course of monitoring individuals improperly using this system,
+                or in the course of system maintenance, the activities of authorised
+                users may also be monitored.</p>
+
+                <p>Anyone using this system expressly consents to such monitoring and is
+                advised that if such monitoring reveals possible evidence of criminal
+                activity, system personnel may provide the evidence of such monitoring
+                to law enforcement officials.</p></b>]]>
+            </mx:htmlText>
+        </mx:TextArea>
+    </mx:Form>
+</mx:TitleWindow>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+                xmlns:cp="components.*"
+                layout="vertical"
+                label="ISPMan"
+                pageTitle="ISPMan"
+                horizontalGap="2"
+                width="100%"
+                height="100%"
+                creationComplete="creationComplete(event)">
+
+    <mx:Script>
+      import mx.controls.Alert;
+      import mx.events.FlexEvent;
+      import mx.managers.PopUpManager;
+      import flash.display.DisplayObject;
+
+      import mx.messaging.ChannelSet;
+      import mx.messaging.channels.SecureAMFChannel;
+      import mx.rpc.AbstractOperation;
+      import mx.rpc.events.FaultEvent;
+      import mx.rpc.events.ResultEvent;
+      import mx.rpc.remoting.mxml.RemoteObject;
+
+      import org.ufsoft.ispman.models.AuthenticatedUser;
+      import org.ufsoft.ispman.events.AuthenticationEvent;
+      import components.AuthDialog;
+
+      // VARS
+      private var authDialog: AuthDialog;
+      private var user      : AuthenticatedUser;
+
+      private function creationComplete(event:FlexEvent) : void {
+        addEventListener(AuthenticationEvent.NEEDED, AuthenticationNeeded);
+        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.NEEDED));
+      }
+
+      private function AuthenticationNeeded(event:Event) : void {
+        authDialog = new AuthDialog();
+        authDialog.addEventListener(AuthenticationEvent.SEND, authenticate);
+        PopUpManager.addPopUp(authDialog, DisplayObject(this), true);
+      }
+
+      protected function authenticate(event:AuthenticationEvent) : void {
+        user = event.user;
+        var remoteObj : RemoteObject=getService();
+        var operation : AbstractOperation=remoteObj.getOperation('auth.login');
+        operation.addEventListener(FaultEvent.FAULT, authenticateFailure);
+        operation.addEventListener(ResultEvent.RESULT, authenticateSuccess);
+        operation.send(event.user);
+      }
+
+      protected function authenticateFailure(event:FaultEvent) : void {
+        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.FAILURE));
+        var errorMsg : String="Authentication Failed " + event.fault.faultCode;
+        Alert.show(event.fault.faultDetail, errorMsg);
+      }
+
+      protected function authenticateSuccess(event:ResultEvent) : void {
+        //addEventListener(AuthenticationEvent.SUCESS, loadOverview);
+        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SUCESS));
+        logout.addEventListener("click", doLogout);
+        logout.enabled = true;
+        Alert.show(event.result.toString());
+        PopUpManager.removePopUp(authDialog);
+        //log += event.result.toString() + '\n';
+      }
+
+      protected function doLogout(event:Event) : void {
+        var remoteObj : RemoteObject=getService();
+        var operation : AbstractOperation=remoteObj.getOperation('auth.logout');
+        operation.addEventListener(ResultEvent.RESULT, doLogoutSucess);
+        operation.addEventListener(FaultEvent.FAULT, onServiceFault);
+        operation.send();
+      }
+
+      protected function doLogoutSucess(event:ResultEvent) : void {
+        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.NEEDED));
+        logout.enabled = false;
+      }
+
+      private function getService() : RemoteObject {
+        var url : String='https://{server.name}:8443/service';
+        var channel : SecureAMFChannel=new SecureAMFChannel("pyamf-channel", url);
+        // Create a channel set and add your channel(s) to it
+        var channels : ChannelSet=new ChannelSet();
+        channels.addChannel(channel);
+
+        // Create a new remote object and set channels
+        var remoteObject : RemoteObject=new RemoteObject("ISPManService");
+
+        remoteObject.showBusyCursor = true;
+        remoteObject.channelSet = channels;
+        remoteObject.addEventListener(FaultEvent.FAULT, onServiceFault);
+        return remoteObject;
+      }
+
+      /**
+       * Service reported an error.
+       *
+       * @param event Event containing error information.
+       */
+      protected function onServiceFault(event : FaultEvent) : void {
+        if (event.fault.faultCode == 'AuthenticationNeeded') {
+          dispatchEvent(new Event("AuthenticationNeeded", true));
+        } else {
+          var errorMsg : String=event.fault.faultCode;
+          Alert.show(event.fault.faultDetail, errorMsg);
+        }
+      }
+
+    </mx:Script>
+
+    <mx:ApplicationControlBar width="100%" dock="true">
+        <mx:HBox width="100%">
+            <mx:Button id="overviewButton" label="Overview"/>
+            <mx:ComboBox id="chooseDomain" prompt="Choose Domain" labelField="state">
+                <mx:ArrayCollection>
+                    <mx:Object state="AL" capital="Montgomery"/>
+                    <mx:Object state="AK" capital="Juneau"/>
+                    <mx:Object state="AR" capital="Little Rock"/>
+                </mx:ArrayCollection>
+            </mx:ComboBox>
+            <mx:Spacer width="100%"/>
+            <mx:Button id="ispman_home1" label="ISPMan Home"/>
+            <mx:Button id="logout" label="Logout"/>
+        </mx:HBox>
+    </mx:ApplicationControlBar>
+    <mx:Box id="mainContent" direction="vertical" width="100%" height="100%">
+        <cp:Overview/>
+    </mx:Box>
+</mx:Application>
