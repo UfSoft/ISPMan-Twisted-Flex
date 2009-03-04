@@ -139,16 +139,12 @@ class ISPManFactory(Site):
         log.debug('ISPMan(perl) Is Now Setup')
 
     def get_ispman(self):
-        if not self._ispman:
-            self._ispman = perl.eval('$ENV{"HTTP_USER_AGENT"} = "ISPMAN-CCP"; '+
-                                     '$ispman = ISPMan->new() or die "$@"')
-        return self._ispman
-
-    ispman = property(get_ispman)
+        ispman = perl.eval('$ENV{"HTTP_USER_AGENT"} = "FLEX-CP"; '
+                           '$ispman = ISPMan->new() or die "$@"')
+        return ispman
 
     def get_ldap(self):
         if not self._ldap:
-            #perl.require('Net::LDAP')
             log.debug('Grabbing New LDAP Connection')
             eval_string = 'Net::LDAP->new( "%s",version => %s ) or die "$@";'
             log.debug('Eval String: %s', eval_string % (

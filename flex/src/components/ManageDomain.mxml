@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical">
+    <mx:Panel roundedBottomCorners="true"
+              borderAlpha="0.15"
+              cornerRadius="5"
+              fontSize="12"
+              paddingTop="2" paddingRight="5" paddingBottom="10" paddingLeft="5"
+              id="manageDomainPanel"
+              fontWeight="bold"
+              height="100%" width="0%"
+              title="Manage Domain">
+    </mx:Panel>
+    <mx:Box id="mainContent" direction="vertical" width="100%" height="100%">
+    </mx:Box>
+</mx:Application>

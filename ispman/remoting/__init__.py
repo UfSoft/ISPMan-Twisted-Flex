@@ -6,13 +6,11 @@
 # License: BSD - Please view the LICENSE file for additional information.
 # ==============================================================================
 
-from twisted.web.resource import Resource as BaseResource
+import logging
+from twisted.internet.threads import deferToThread, defer
+from twisted.web.resource import Resource
+from pyamf.remoting.gateway import expose_request
+from ispman.decorators import utf8
 
-class Resource(BaseResource):
-    """Protected resource, requests must be authenticated first in order to
-    get access, else a 401 is raised."""
-
-class UnprotectedResource(BaseResource):
-    """Base class for unprotected resources"""
-
-
+__all__ = ['logging', 'defer', 'deferToThread', 'expose_request', 'Resource',
+           'utf8']

@@ -7,7 +7,10 @@
 # ==============================================================================
 
 class AuthenticatedUser(object):
-    def __init__(self, username=None, password=None, loginType=None):
+    language = 'en'
+
+    def __init__(self, username=None, password=None, loginType=None,
+                 bind_dn = None):
         self.username = username.encode('utf-8')
         self.password = password.encode('utf-8')
         self.login_type = loginType

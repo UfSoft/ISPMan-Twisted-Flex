@@ -7,6 +7,7 @@
                 horizontalGap="2"
                 width="100%"
                 height="100%"
+                paddingTop="5" paddingRight="5" paddingBottom="5" paddingLeft="5"
                 creationComplete="creationComplete(event)">
 
     <mx:Script>
@@ -25,9 +26,11 @@
       import org.ufsoft.ispman.models.AuthenticatedUser;
       import org.ufsoft.ispman.events.AuthenticationEvent;
       import components.AuthDialog;
+      import components.Overview;
 
       // VARS
       private var authDialog: AuthDialog;
+      private var overview  : Overview;
       private var user      : AuthenticatedUser;
 
       private function creationComplete(event:FlexEvent) : void {
@@ -61,8 +64,10 @@
         dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SUCESS));
         logout.addEventListener("click", doLogout);
         logout.enabled = true;
-        Alert.show(event.result.toString());
+        //Alert.show(event.result.toString());
         PopUpManager.removePopUp(authDialog);
+        overview = new Overview();
+        mainContent.addChild(overview);
         //log += event.result.toString() + '\n';
       }
 
@@ -79,8 +84,8 @@
         logout.enabled = false;
       }
 
-      private function getService() : RemoteObject {
-        var url : String='https://{server.name}:8443/service';
+      public function getService() : RemoteObject {
+        var url : String='https://{server.name}:{server.port}/service';
         var channel : SecureAMFChannel=new SecureAMFChannel("pyamf-channel", url);
         // Create a channel set and add your channel(s) to it
         var channels : ChannelSet=new ChannelSet();
@@ -110,7 +115,6 @@
       }
 
     </mx:Script>
-
     <mx:ApplicationControlBar width="100%" dock="true">
         <mx:HBox width="100%">
             <mx:Button id="overviewButton" label="Overview"/>
@@ -126,7 +130,6 @@
             <mx:Button id="logout" label="Logout"/>
         </mx:HBox>
     </mx:ApplicationControlBar>
-    <mx:Box id="mainContent" direction="vertical" width="100%" height="100%">
-        <cp:Overview/>
-    </mx:Box>
+    <mx:HDividedBox id="mainContent" width="100%" height="100%" cornerRadius="5"
+                    paddingTop="5" paddingRight="5" paddingBottom="5" paddingLeft="5"/>
 </mx:Application>
