@@ -7,7 +7,7 @@ package org.ufsoft.ispman.events {
 
   public class AuthenticationEvent extends Event {
     public static const SEND    :String = "SendAuthentication";
-    public static const NEEDED  :String = "SendAuthentication";
+    public static const NEEDED  :String = "NeedAuthentication";
     public static const SUCESS  :String = "AuthenticationSucessful";
     public static const FAILURE :String = "AuthenticationFailure";
     public var user             :AuthenticatedUser;
@@ -19,7 +19,7 @@ package org.ufsoft.ispman.events {
       cancelable:Boolean = false
       )
     {
-      super(type, true, cancelable);
+      super(type, bubbles, cancelable);
       this.user = user;
     }
 

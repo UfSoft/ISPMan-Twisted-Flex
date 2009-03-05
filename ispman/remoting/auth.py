@@ -45,6 +45,8 @@ class Authentication(Resource):
         return d
 
     def _login(self, request, user):
+        if getattr(request.session, 'authenticated', False):
+            return 'Logged In.'
         ldap = request.factory.ldap
         ldap_config = request.factory.ldap_config
         ispman_session = ISPManSession()

@@ -6,9 +6,10 @@
 # License: BSD - Please view the LICENSE file for additional information.
 # ==============================================================================
 
-from ispman.remoting import auth, timer
+from ispman.remoting import auth, domains, timer
 
 services = {
-    'ISPManService.auth':     auth.Authentication(),
-    'ISPManService.timer':    timer.Timer(),
+    'ISPManService.auth':       auth.Authentication(),
+    'ISPManService.timer':      timer.Timer(),
+    'ISPManService.domains':    domains.DomainsResource()
 }

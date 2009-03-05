@@ -1,15 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical">
-    <mx:Panel roundedBottomCorners="true"
-              borderAlpha="0.15"
-              cornerRadius="5"
-              fontSize="12"
-              paddingTop="2" paddingRight="5" paddingBottom="10" paddingLeft="5"
-              id="manageDomainPanel"
-              fontWeight="bold"
-              height="100%" width="0%"
-              title="Manage Domain">
-    </mx:Panel>
-    <mx:Box id="mainContent" direction="vertical" width="100%" height="100%">
+<mx:HDividedBox xmlns:mx="http://www.adobe.com/2006/mxml"
+                width="100%" height="100%" creationComplete="creationComplete(event)">
+    <mx:Script>
+
+      import mx.controls.Alert;
+      import mx.controls.Text;
+      import mx.events.FlexEvent;
+
+      private function creationComplete(event:FlexEvent):void {
+        var txt:Text = new Text();
+        txt.text = "foo"
+        mainContent.addChild(txt);
+      }
+    </mx:Script>
+    <mx:VBox paddingTop="10" paddingRight="5" paddingBottom="10" paddingLeft="5"
+             height="100%" width="20%" dropShadowEnabled="true"
+             backgroundAlpha="0.5" borderStyle="solid" cornerRadius="5">
+        <mx:Button label="Edit Domain" width="100%"/>
+        <mx:Accordion width="100%" height="100%" backgroundAlpha="0"
+                      paddingTop="10" paddingRight="0" paddingBottom="10" paddingLeft="0"
+                      borderStyle="none">
+            <!-- Define each panel using a VBox container. -->
+            <mx:VBox label="Manage DNS" width="100%" paddingRight="10" paddingLeft="10" paddingTop="10" paddingBottom="10">
+                <mx:Button label="SOA Records" width="100%"/>
+                <mx:Button label="MX Records" width="100%"/>
+                <mx:Button label="NS Records" width="100%"/>
+                <mx:Button label="A Records" width="100%"/>
+                <mx:Button label="AAAA Records" width="100%"/>
+                <mx:Button label="TXT Records" width="100%"/>
+                <mx:Button label="SOA Records" width="100%"/>
+            </mx:VBox>
+            <mx:VBox label="Manage Users" width="100%" paddingTop="10" paddingBottom="10">
+            </mx:VBox>
+            <mx:VBox label="Manage Mailgroups" width="100%" paddingTop="10" paddingBottom="10">
+            </mx:VBox>
+            <mx:VBox label="Manage Web Users" width="100%" paddingTop="10" paddingBottom="10">
+            </mx:VBox>
+            <mx:VBox label="Manage Virtual Hosts" width="100%" paddingTop="10" paddingBottom="10">
+            </mx:VBox>
+        </mx:Accordion>
+    </mx:VBox>
+    <mx:Box id="mainContent" direction="vertical" width="100%" height="100%"
+            paddingTop="0" paddingRight="0" paddingBottom="0" paddingLeft="0">
     </mx:Box>
-</mx:Application>
+</mx:HDividedBox>

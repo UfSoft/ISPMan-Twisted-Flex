@@ -21,7 +21,7 @@
       import mx.rpc.events.ResultEvent;
       import mx.rpc.remoting.mxml.RemoteObject;
 
-      import mx.effects.AnimateProperty;
+      import org.ufsoft.ispman.events.LoadDataEvent;
 
       private function creationComplete(event:FlexEvent):void {
         var remoteObj: RemoteObject=parentApplication.getService();
@@ -32,7 +32,7 @@
       }
 
       protected function overviewFailure(event:FaultEvent) : void {
-        var errorMsg : String="Overview Failed " + event.fault.faultCode;
+        var errorMsg : String="Overview Failed: " + event.fault.faultCode;
         Alert.show(event.fault.faultDetail, errorMsg);
       }
 
@@ -45,6 +45,10 @@
           formItem.addChild(itemText);
           overviewForm.addChild(formItem);
         }
+
+        parentApplication.dispatchEvent(
+          new LoadDataEvent(LoadDataEvent.LOAD, 'domains.get_domains')
+        );
       }
 
     </mx:Script>
