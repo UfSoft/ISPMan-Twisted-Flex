@@ -11,6 +11,7 @@ from twisted.internet.threads import deferToThread, defer
 from twisted.web.resource import Resource
 from pyamf.remoting.gateway import expose_request
 from ispman.decorators import utf8
+from ispman.utils import Hash
 
 __all__ = ['logging', 'defer', 'deferToThread', 'expose_request', 'Resource',
-           'utf8']
+           'utf8', 'Hash']

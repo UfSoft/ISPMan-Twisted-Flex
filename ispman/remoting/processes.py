@@ -19,7 +19,7 @@ class ProcessesResource(Resource):
             return request.session.ispman.countProcessesInSession(
                 request.session.uid
             )
-        return defer.maybeDeferred(get_current_count)
+        return deferToThread(get_current_count)
 
     @expose_request
     def get_processes(self, request):
@@ -36,4 +36,30 @@ class ProcessesResource(Resource):
             return processes
 #        from pprint import pprint
 #        pprint(get_existing_processes())
-        return defer.maybeDeferred(get_existing_processes)
+        return deferToThread(get_existing_processes)
+
+    @expose_request
+    def delete_process(self, request, process):
+        log.debug(process)
+        def _delete_process():
+            return request.session.ispman.deleteProcessByPID(
+                int(process.get('ispmanPid'))
+            )
+        return deferToThread(_delete_process)
+
+    @expose_request
+    def update_process(self, request, process):
+        log.debug(process)
+        process = Hash(process)
+        def _update_process():
+            # Can't just call ispman.modifyProcess since that's meant for
+            # the perl CP, we just do what the function does minus what we don't
+            # need
+            return request.session.ispman.updateEntryWithData(
+                process.param('dn'), {
+                    'ispmanStatus': process.param('ispmanStatus'),
+                    'ispmanPid': process.param('ispmanPid'),
+                    'ispmanHostName': process.param('ispmanHostName'),
+                }
+            )
+        return deferToThread(_update_process)

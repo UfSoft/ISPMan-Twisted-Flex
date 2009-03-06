@@ -3,6 +3,7 @@
          xmlns:controls="org.ufsoft.ispman.controls.*"
          width="100%" height="100%" verticalScrollPolicy="off">
     <mx:Script>
+      import flash.events.Event;
       import mx.controls.Alert;
       import mx.collections.ArrayCollection;
       import mx.events.ListEvent;
@@ -12,6 +13,9 @@
       import mx.rpc.events.FaultEvent;
       import mx.rpc.events.ResultEvent;
       import mx.rpc.remoting.mxml.RemoteObject;
+
+
+      private var remoteObj: RemoteObject;
 
       [Bindable]
       public var processes      : ArrayCollection;
@@ -24,18 +28,30 @@
         {label: 'Error', status: 'error'}
       ]);
 
+      [Event(name="updateProcesses", type="Event")]
+      [Event(name="updateHosts", type="Event")]
+
       private function creationComplete():void {
+        addEventListener("updateProcesses", updateProcessesEvent);;
+        addEventListener("updateHosts", updateHostsEvent);
         processesList.addEventListener("change", updateStatusCombo);
         processesList.addEventListener("change", updateHostsCombo);
-        var remoteObj : RemoteObject=parentApplication.getService();
-        var hosts_operation : AbstractOperation=remoteObj.getOperation('hosts.get_hosts');
-        hosts_operation.addEventListener(ResultEvent.RESULT, populateHosts);
-        hosts_operation.send();
+
+        remoteObj = parentApplication.getService();
+        dispatchEvent(new Event("updateHosts"));
+        dispatchEvent(new Event("updateProcesses"));
+      }
+
+      private function updateProcessesEvent(event:Event):void {
         var process_operation : AbstractOperation=remoteObj.getOperation('processes.get_processes');
         process_operation.addEventListener(ResultEvent.RESULT, updateProcessesArray);
         process_operation.send();
-        processesList.addEventListener("change", updateStatusCombo);
-        processesList.addEventListener("change", updateHostsCombo);
+      }
+
+      private function updateHostsEvent(event:Event):void {
+        var hosts_operation : AbstractOperation=remoteObj.getOperation('hosts.get_hosts');
+        hosts_operation.addEventListener(ResultEvent.RESULT, populateHosts);
+        hosts_operation.send();
       }
 
       private function populateHosts(event:ResultEvent):void {
@@ -80,6 +96,41 @@
         }
       }
 
+      private function deleteProcess(event:Event):void {
+        if ( ! processesList.selectedItem ) {
+          Alert.show("No process selected");
+          return;
+        }
+        var delete_operation : AbstractOperation=remoteObj.getOperation('processes.delete_process');
+        delete_operation.addEventListener(ResultEvent.RESULT, deleteProcessSucess);
+        delete_operation.send(processesList.selectedItem);
+      }
+
+      private function deleteProcessSucess(event:ResultEvent):void {
+        dispatchEvent(new Event("updateProcesses"));
+      }
+
+      private function updateProcess(event:Event):void {
+        var process:Object = processesList.selectedItem;
+        if ( ! process ) {
+          Alert.show("No process selected");
+          return;
+        }
+
+        // update process with the changed details
+        process.ispmanUser = ispmanUserInput.text;
+        process.ispmanStatus = ispmanStatusCombo.selectedItem.status;
+        process.ispmanHostName = ispmanHostnameCombo.selectedItem.ispmanHostName;
+
+        var operation : AbstractOperation=remoteObj.getOperation('processes.update_process');
+        operation.addEventListener(ResultEvent.RESULT, updateProcessSucess);
+        operation.send(processesList.selectedItem);
+      }
+
+      private function updateProcessSucess(event:ResultEvent):void {
+        dispatchEvent(new Event("updateProcesses"));
+      }
+
     </mx:Script>
 
     <mx:Panel width="100%" title="Processes Queue" creationComplete="creationComplete()"
@@ -99,9 +150,9 @@
     </mx:Panel>
     <mx:Panel width="100%" height="295" title="Process Details" layout="absolute"
               id="processDetailsPanel">
-        <mx:Form id="processDetailsForm" defaultButton="{updateProcess}">
+        <mx:Form id="processDetailsForm" defaultButton="{updateProcessButton}">
             <mx:FormItem label="User:" id="ispmanUserItem">
-                <mx:TextInput id="ispmanUser" text="{processesList.selectedItem.ispmanUser}"/>
+                <mx:TextInput id="ispmanUserInput" text="{processesList.selectedItem.ispmanUser}"/>
             </mx:FormItem>
             <!--
                  <mx:FormItem label="ou:">
@@ -132,7 +183,9 @@
         </mx:Form>
         <mx:ControlBar>
             <mx:Spacer width="100%"/>
-            <mx:Button id="updateProcess" label="Update Process"/>
+            <mx:Button id="deleteProcessButton" label="Delete Process" styleName="sensible"
+                       click="deleteProcess(event)"/>
+            <mx:Button id="updateProcessButton" label="Update Process" click="updateProcess(event)"/>
         </mx:ControlBar>
     </mx:Panel>
 </mx:VBox>

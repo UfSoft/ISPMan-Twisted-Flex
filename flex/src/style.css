@@ -3,7 +3,7 @@
 global {
   modalTransparency: 0.7;
   modalTransparencyColor: black;
-  modalTransparencyDuration: 300;
+  modalTransparencyDuration: 150;
 }
 
 Panel {
@@ -17,3 +17,7 @@ FormItemLabel {
   font-weight: bold;
 }
 
+.sensible {
+  fillColors: haloOrange, red;
+  color: white;
+}
