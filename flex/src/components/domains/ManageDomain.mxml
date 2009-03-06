@@ -4,14 +4,30 @@
     <mx:Script>
 
       import mx.controls.Alert;
-      import mx.controls.Text;
       import mx.events.FlexEvent;
+      import flash.display.DisplayObject;
+
+      import components.domains.dns.SOA;
+
+      private var soa: SOA;
+      private var _currentChild : DisplayObject;
 
       private function creationComplete(event:FlexEvent):void {
-        var txt:Text = new Text();
-        txt.text = "foo"
-        mainContent.addChild(txt);
+        //
       }
+      private function switchContent(content:DisplayObject): void {
+        if ( _currentChild ) {
+          mainContent.removeChild(_currentChild);
+        }
+        _currentChild = content;
+        mainContent.addChild(content);
+      }
+
+      private function showSOA(event:Event):void {
+        if ( ! soa ) { soa = new SOA() }
+        switchContent(soa);
+      }
+
     </mx:Script>
     <mx:VBox paddingTop="10" paddingRight="5" paddingBottom="10" paddingLeft="5"
              height="100%" width="20%" dropShadowEnabled="true"
@@ -22,7 +38,7 @@
                       borderStyle="none">
             <!-- Define each panel using a VBox container. -->
             <mx:VBox label="Manage DNS" width="100%" paddingRight="10" paddingLeft="10" paddingTop="10" paddingBottom="10">
-                <mx:Button label="SOA Records" width="100%"/>
+                <mx:Button label="SOA Records" width="100%" click="showSOA(event)"/>
                 <mx:Button label="MX Records" width="100%"/>
                 <mx:Button label="NS Records" width="100%"/>
                 <mx:Button label="A Records" width="100%"/>

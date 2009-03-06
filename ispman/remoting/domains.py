@@ -7,18 +7,20 @@
 # ==============================================================================
 
 from ispman.remoting import *
+from pyamf.flex import ArrayCollection
+
 log = logging.getLogger(__name__)
 
 class DomainsResource(Resource):
 
     @expose_request
     def get_domains(self, request):
-        domains = []
+        domains = ArrayCollection()
 
         for dn, data in dict(request.session.ispman.getDomains()).iteritems():
             domain = dict(data)
             domain['dn'] = dn
             domain['label'] = "%(ispmanDomain)s (%(ispmanDomainType)s)" % domain
-            domains.append(domain)
+            domains.addItem(domain)
 
         return domains

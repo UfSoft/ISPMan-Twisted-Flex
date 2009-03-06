@@ -2,10 +2,9 @@
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
                 layout="vertical"
                 isPopUp="false"
-                creationComplete="creationComplete(event)"
+                creationComplete="creationComplete()"
                 title="Authentication Required">
     <mx:Script>
-      import mx.events.FlexEvent;
       import mx.managers.PopUpManager;
       import mx.collections.ArrayCollection;
 
@@ -24,7 +23,7 @@
         {label: 'Domain', type: 4},
       ]);
 
-      protected function creationComplete( event:FlexEvent ):void {
+      protected function creationComplete():void {
         PopUpManager.centerPopUp(this); // center the popup
 
         // Listen to key events to enable or not the authenticate button
@@ -33,9 +32,9 @@
         // listen to login type changes
         loginTypeCombo.addEventListener("change", loginTypeSelect);
 
-        // listen to authenticate button cliks to submit
+        // listen to authenticate button cliks to submit or Enter-key presses
         authButton.addEventListener( MouseEvent.CLICK, submitForm );
-        password.addEventListener( KeyboardEvent.KEY_DOWN, submitFormEnterKey );
+        authForm.addEventListener( KeyboardEvent.KEY_DOWN, submitFormEnterKey );
 
         // Set focus on username
         username.setFocus();
@@ -71,7 +70,7 @@
       }
     </mx:Script>
 
-    <mx:Form>
+    <mx:Form id="authForm">
         <mx:FormItem id="usernameItem" label="Username:">
             <mx:TextInput id="username"/>
         </mx:FormItem>

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
                 xmlns:cp="components.*"
-                layout="vertical"
+                xmlns:controls="org.ufsoft.ispman.controls.*"
+                layout="absolute"
                 label="ISPMan"
                 pageTitle="ISPMan"
                 horizontalGap="2"
                 width="100%"
                 height="100%"
-                paddingTop="5" paddingRight="5" paddingBottom="5" paddingLeft="5"
+                paddingTop="5" paddingRight="5" paddingBottom="10" paddingLeft="5"
                 creationComplete="creationComplete(event)">
 
     <mx:Style source="style.css" />
@@ -30,7 +31,8 @@
       import org.ufsoft.ispman.events.AuthenticationEvent;
       import components.AuthDialog;
       import components.Overview;
-      import components.ManageDomain;
+      import components.domains.ManageDomain;
+      import components.processes.ProcessesOverview;
 
       // VARS
       private var authDialog    : AuthDialog;
@@ -38,6 +40,7 @@
       private var manageDomain  : ManageDomain;
       private var user          : AuthenticatedUser;
       private var _currentChild : DisplayObject;
+      private var processesOverview: ProcessesOverview;
 
       [Bindable]
       private var availableDomains   : ArrayCollection;
@@ -94,9 +97,7 @@
       }
 
       protected function displayOverview(event:Event):void {
-        if ( ! overview ) {
-          overview = new Overview();
-        }
+        overview = new Overview();
         switchContent(overview);
         chooseDomain.selectedIndex = -1;
       }
@@ -123,11 +124,12 @@
       }
 
       private function loadDataForEventSucess(event:ResultEvent) : void {
-        var items:Array = new Array();
+        availableDomains = event.result as ArrayCollection;
+        /*var items:Array = new Array();
         for each ( var item:Object in event.result ) {
             items.push(item);
         }
-        availableDomains = new ArrayCollection(items);
+        availableDomains = new ArrayCollection(items);*/
       }
 
       /*
@@ -136,6 +138,11 @@
       private function domainChange(event:Event):void {
         manageDomain = new ManageDomain();
         switchContent(manageDomain);
+      }
+
+      private function loadProcessesOverview(event:Event):void {
+        processesOverview = new ProcessesOverview();
+        switchContent(processesOverview);
       }
 
       public function getService() : RemoteObject {
@@ -169,17 +176,19 @@
       }
 
     </mx:Script>
-    <mx:ApplicationControlBar width="100%" dock="true">
+    <mx:ApplicationControlBar width="100%" dock="true" id="appCB">
         <mx:HBox width="100%">
             <mx:Button id="overviewButton" label="Overview" click="displayOverview(event)"/>
             <mx:ComboBox id="chooseDomain" prompt="Choose Domain"
                          labelField="label" dataProvider="{availableDomains}"
                          change="domainChange(event)"/>
             <mx:Spacer width="100%"/>
-            <mx:Button id="ispman_home1" label="ISPMan Home"/>
+            <controls:ProcessesButton click="loadProcessesOverview(event)"/>
+            <mx:Button id="ispman_home" label="ISPMan Home"/>
             <mx:Button id="logout" label="Logout"/>
         </mx:HBox>
     </mx:ApplicationControlBar>
     <mx:HDividedBox id="mainContent" width="100%" height="100%" cornerRadius="5"
-                    paddingTop="5" paddingRight="5" paddingBottom="5" paddingLeft="5"/>
+                    paddingTop="5" paddingRight="5" paddingBottom="5" paddingLeft="5">
+    </mx:HDividedBox>
 </mx:Application>

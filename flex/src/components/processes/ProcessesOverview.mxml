@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+         xmlns:controls="org.ufsoft.ispman.controls.*"
+         width="100%" height="100%" verticalScrollPolicy="off">
+    <mx:Script>
+      import mx.controls.Alert;
+      import mx.collections.ArrayCollection;
+      import mx.events.ListEvent;
+
+
+      import mx.rpc.AbstractOperation;
+      import mx.rpc.events.FaultEvent;
+      import mx.rpc.events.ResultEvent;
+      import mx.rpc.remoting.mxml.RemoteObject;
+
+      [Bindable]
+      public var processes      : ArrayCollection;
+      [Bindable]
+      public var availableHosts : ArrayCollection;
+      [Bindable]
+      public var processStatus : ArrayCollection = new ArrayCollection([
+        {label: 'New', status: 'new'},
+        {label: 'In Session', status: 'insession'},
+        {label: 'Error', status: 'error'}
+      ]);
+
+      private function creationComplete():void {
+        processesList.addEventListener("change", updateStatusCombo);
+        processesList.addEventListener("change", updateHostsCombo);
+        var remoteObj : RemoteObject=parentApplication.getService();
+        var hosts_operation : AbstractOperation=remoteObj.getOperation('hosts.get_hosts');
+        hosts_operation.addEventListener(ResultEvent.RESULT, populateHosts);
+        hosts_operation.send();
+        var process_operation : AbstractOperation=remoteObj.getOperation('processes.get_processes');
+        process_operation.addEventListener(ResultEvent.RESULT, updateProcessesArray);
+        process_operation.send();
+        processesList.addEventListener("change", updateStatusCombo);
+        processesList.addEventListener("change", updateHostsCombo);
+      }
+
+      private function populateHosts(event:ResultEvent):void {
+        availableHosts = event.result as ArrayCollection;
+      }
+
+      private function updateProcessesArray(event:ResultEvent):void {
+        processes = event.result as ArrayCollection;
+        processesList.rowCount = event.result.length +1 ;
+        processesListPanel.height = root.height - parentApplication.appCB.height - 295 -15 ;
+      }
+
+      private function styleFunction(item:Object, rowIndex:int,
+                                     dataIndex:int, color:uint):uint {
+        if ( item.ispmanStatus == 'new' ) {
+          return 0xCCFFCC;
+        }
+        if ( item.ispmanStatus == 'error') {
+          return 0xFFCCCC;
+        }
+        return color;
+      }
+
+
+      private function updateHostsCombo(event:Event):void {
+        ispmanHostnameCombo.enabled = true;
+        for ( var i:int=0; i&lt;availableHosts.source.length; i++ ) {
+          if ( availableHosts.getItemAt(i).status ==  event.target.selectedItem.ispmanHostName ) {
+            ispmanHostnameCombo.selectedIndex = i;
+            break;
+          }
+        }
+      }
+
+      private function updateStatusCombo(event:Event):void {
+        ispmanStatusCombo.enabled = true;
+        for ( var i:int=0; i&lt;processStatus.source.length; i++ ) {
+          if ( processStatus.getItemAt(i).status ==  event.target.selectedItem.ispmanStatus ) {
+            ispmanStatusCombo.selectedIndex = i;
+            break;
+          }
+        }
+      }
+
+    </mx:Script>
+
+    <mx:Panel width="100%" title="Processes Queue" creationComplete="creationComplete()"
+              layout="vertical" id="processesListPanel">
+        <controls:RowColorDataGrid id="processesList" color="0x323232" rowCount="1" width="100%"
+                                   dataProvider="{processes}" rowColorFunction="styleFunction">
+            <controls:columns>
+                <mx:DataGridColumn dataField="ispmanSession" headerText="Session"/>
+                <mx:DataGridColumn dataField="ispmanPid" headerText="PID"/>
+                <mx:DataGridColumn dataField="ispmanHostName" headerText="Host"/>
+                <mx:DataGridColumn dataField="ispmanDomain" headerText="Domain"/>
+                <mx:DataGridColumn dataField="ispmanProcess" headerText="Process"/>
+                <mx:DataGridColumn dataField="ispmanStatus" headerText="Status"/>
+                <mx:DataGridColumn dataField="ispmanUser" headerText="Created By"/>
+            </controls:columns>
+        </controls:RowColorDataGrid>
+    </mx:Panel>
+    <mx:Panel width="100%" height="295" title="Process Details" layout="absolute"
+              id="processDetailsPanel">
+        <mx:Form id="processDetailsForm" defaultButton="{updateProcess}">
+            <mx:FormItem label="User:" id="ispmanUserItem">
+                <mx:TextInput id="ispmanUser" text="{processesList.selectedItem.ispmanUser}"/>
+            </mx:FormItem>
+            <!--
+                 <mx:FormItem label="ou:">
+                 <mx:Label text="{processesList.selectedItem.ou}"/>
+                 </mx:FormItem>
+                 <mx:FormItem label="objectClass:">
+                 <mx:Label text="{processesList.selectedItem.objectClass}"/>
+                 </mx:FormItem>  -->
+            <mx:FormItem label="PID:">
+                <mx:Label text="{processesList.selectedItem.ispmanPid}"/>
+            </mx:FormItem>
+            <mx:FormItem label="Session:">
+                <mx:Label text="{processesList.selectedItem.ispmanSession}"/>
+            </mx:FormItem>
+            <mx:FormItem label="Status:">
+                <mx:ComboBox id="ispmanStatusCombo" dataProvider="{processStatus}" enabled="false"/>
+            </mx:FormItem>
+            <mx:FormItem label="Process:">
+                <mx:Label text="{processesList.selectedItem.ispmanProcess}"/>
+            </mx:FormItem>
+            <mx:FormItem label="Domain:">
+                <mx:Label text="{processesList.selectedItem.ispmanDomain}"/>
+            </mx:FormItem>
+            <mx:FormItem label="Hostname:">
+                <mx:ComboBox id="ispmanHostnameCombo" dataProvider="{availableHosts}"
+                             labelField="ispmanHostName" enabled="false"/>
+            </mx:FormItem>
+        </mx:Form>
+        <mx:ControlBar>
+            <mx:Spacer width="100%"/>
+            <mx:Button id="updateProcess" label="Update Process"/>
+        </mx:ControlBar>
+    </mx:Panel>
+</mx:VBox>

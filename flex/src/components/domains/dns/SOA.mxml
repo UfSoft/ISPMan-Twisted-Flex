@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical"
+          width="100%" title="Edit SOA Records">
+    <mx:Script>
+    </mx:Script>
+    <mx:Form id="soa">
+        <mx:FormItem id="primaryItem" label="Primary:">
+            <mx:TextInput id="primary"/>
+        </mx:FormItem>
+        <mx:FormItem id="rootmailItem" label="Root Mail:">
+            <mx:TextInput id="rootmail"/>
+        </mx:FormItem>
+        <mx:FormItem id="expireItem" label="Expire:">
+            <mx:TextInput id="expire"/>
+        </mx:FormItem>
+        <mx:FormItem id="retryItem" label="Retry:">
+            <mx:TextInput id="retry"/>
+        </mx:FormItem>
+        <mx:FormItem id="refreshItem" label="Refresh:">
+            <mx:TextInput id="refresh"/>
+        </mx:FormItem>
+        <mx:FormItem id="minimumItem" label="Minimum:">
+            <mx:TextInput id="minimum"/>
+        </mx:FormItem>
+        <mx:Button label="Save Entry" id ="submit" width="100%"/>
+    </mx:Form>
+</mx:Panel>

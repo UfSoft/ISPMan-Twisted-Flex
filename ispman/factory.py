@@ -94,8 +94,7 @@ class ISPManFactory(Site):
         perl.require('ISPMan')
         perl.require('CGI')
         try:
-            ispman_perl = perl.eval('$ENV{"HTTP_USER_AGENT"} = "ISPMAN-CCP"; ' +
-                                    '$ispman = ISPMan->new() or die "$@"')
+            ispman_perl = self.get_ispman()
         except Exception, err:
             print "Failed to connect to the ISPMan Perl backend:", err
             sys.exit(1)
@@ -135,7 +134,6 @@ class ISPManFactory(Site):
             'ispmanDomain', 'FTPQuotaMBytes', 'FTPStatus', 'mailHost',
             'fileHost', 'dialupAccess', 'radiusProfileDN')
 
-        self.perl = ispman_perl
         log.debug('ISPMan(perl) Is Now Setup')
 
     def get_ispman(self):

@@ -1,0 +1,19 @@
+@CHARSET "UTF-8";
+
+global {
+  modalTransparency: 0.7;
+  modalTransparencyColor: black;
+  modalTransparencyDuration: 300;
+}
+
+Panel {
+   roundedBottomCorners: true;
+   cornerRadius: 5;
+   width: '100%';
+   height: '100%';
+}
+
+FormItemLabel {
+  font-weight: bold;
+}
+
