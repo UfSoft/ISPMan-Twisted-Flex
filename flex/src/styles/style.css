@@ -1,7 +1,7 @@
 @CHARSET "UTF-8";
 
 global {
-  fontSize: 11;
+  fontSize: 10;
   modalTransparency: 0.7;
   modalTransparencyColor: black;
   modalTransparencyDuration: 100;
@@ -45,40 +45,10 @@ Panel {
 }
 
 FormItemLabel {
-  font-weight: bold;
+  fontWeight: bold;
 }
 
 .sensible {
   fillColors: haloOrange, red;
   color: white;
-}
-
-/* If you want to add your own fonts, uncomment the folowing lines and embed
- * your ttf or swf font as described in the Flex docs
- */
-
-/* embed ttf or swf font as described in the Flex docs */
-@font-face {
-    fontFamily:"Verdana";
-    src: url("fonts/verdana.ttf"); /* Embed from file */
-}
-
-@font-face {
-    fontFamily:"Verdana";
-    src: url("fonts/verdanai.ttf"); /* Embed from file */
-    fontStyle:italic;
-}
-
-@font-face {
-    fontFamily:"Verdana";
-    src: url("fonts/verdanab.ttf"); /* Embed from file */
-    fontStyle:bold;
-}
-
-
-@font-face {
-    fontFamily:"Verdana";
-    src: url("fonts/verdana.swf"); /* Embed from file */
-    fontWeight:bold;
-    fontStyle:italic;
 }

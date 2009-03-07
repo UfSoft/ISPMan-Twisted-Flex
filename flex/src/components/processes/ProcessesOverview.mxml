@@ -61,7 +61,7 @@
       private function updateProcessesArray(event:ResultEvent):void {
         processes = event.result as ArrayCollection;
         processesList.rowCount = event.result.length +1 ;
-        processesListPanel.height = root.height - parentApplication.appCB.height - 295 -15 ;
+        processesListPanel.height = root.height - parentApplication.appCB.height - 305 -15 ;
       }
 
       private function styleFunction(item:Object, rowIndex:int,
@@ -134,8 +134,8 @@
     </mx:Script>
 
     <mx:Panel width="100%" title="Processes Queue" creationComplete="creationComplete()"
-              layout="vertical" id="processesListPanel">
-        <controls:RowColorDataGrid id="processesList" color="0x323232" rowCount="1" width="100%"
+              layout="vertical" id="processesListPanel" styleName="noPadding">
+        <controls:RowColorDataGrid id="processesList" rowCount="1" width="100%"
                                    dataProvider="{processes}" rowColorFunction="styleFunction">
             <controls:columns>
                 <mx:DataGridColumn dataField="ispmanSession" headerText="Session"/>
@@ -148,7 +148,7 @@
             </controls:columns>
         </controls:RowColorDataGrid>
     </mx:Panel>
-    <mx:Panel width="100%" height="295" title="Process Details" layout="absolute"
+    <mx:Panel width="100%" height="305" title="Process Details" layout="absolute"
               id="processDetailsPanel">
         <mx:Form id="processDetailsForm" defaultButton="{updateProcessButton}">
             <mx:FormItem label="User:" id="ispmanUserItem">

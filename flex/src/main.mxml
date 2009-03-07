@@ -5,13 +5,12 @@
                 layout="absolute"
                 label="ISPMan"
                 pageTitle="ISPMan"
-                horizontalGap="2"
                 width="100%"
                 height="100%"
-                paddingTop="5" paddingRight="5" paddingBottom="10" paddingLeft="5"
                 creationComplete="creationComplete(event)">
 
-    <mx:Style source="style.css" />
+    <mx:Style source="styles/style.css" />
+
     <mx:Script>
       import mx.collections.ArrayCollection;
       import mx.controls.Alert;
@@ -188,7 +187,6 @@
             <mx:Button id="logout" label="Logout"/>
         </mx:HBox>
     </mx:ApplicationControlBar>
-    <mx:HDividedBox id="mainContent" width="100%" height="100%" cornerRadius="5"
-                    paddingTop="5" paddingRight="5" paddingBottom="5" paddingLeft="5">
+    <mx:HDividedBox id="mainContent" width="100%" height="100%">
     </mx:HDividedBox>
 </mx:Application>
