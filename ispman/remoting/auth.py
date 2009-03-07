@@ -22,16 +22,6 @@ class AuthenticationNeeded(Exception):
     """Exception which triggers the required authentication code on the
     flex side."""
 
-
-class ISPManSession(dict):
-    """This class is responsible for mimic'ing Perl's CGI sessions in order to
-    allow ISPMan to do it's filtering. For example, which domains does the user
-    have access to, etc..."""
-
-    def param(self, name):
-        return self.get(name)
-
-
 class Authentication(Resource):
 
     @expose_request
@@ -39,8 +29,7 @@ class Authentication(Resource):
         def failure(exception):
             print exception
             raise AuthenticationNeeded
-        d = deferToThread(self._login, request,
-                          AuthenticatedUser(*user.values()))
+        d = deferToThread(self._login, request, AuthenticatedUser(user))
         d.addErrback(failure)
         return d
 
@@ -49,7 +38,7 @@ class Authentication(Resource):
             return 'Logged In.'
         ldap = request.factory.ldap
         ldap_config = request.factory.ldap_config
-        ispman_session = ISPManSession()
+        ispman_session = Hash()
         if user.login_type == ROLE_DOMAIN:
             base_bind_dn = 'ispmanDomain=%s,%%s' % ldap_config['base_dn']
             bind_dn = base_bind_dn % user.username

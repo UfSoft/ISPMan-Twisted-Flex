@@ -50,8 +50,8 @@
         addEventListener(AuthenticationEvent.SUCESS, displayOverview);
 
         // Test with a fake user for existing session
-        user = new AuthenticatedUser('', '', 1);
-        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SEND, user));
+        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SEND,
+                                              new AuthenticatedUser('', '', 1)));
       }
 
       private function AuthenticationNeeded(event:Event) : void {

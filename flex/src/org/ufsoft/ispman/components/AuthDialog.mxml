@@ -14,12 +14,12 @@
       import org.ufsoft.ispman.models.AuthenticatedUser;
       import org.ufsoft.ispman.events.AuthenticationEvent;
 
-      private var loginType  : int=1;
+      private var loginType     : int=1;
       [Bindable]
-      public var user       : AuthenticatedUser;
+      public var user           : AuthenticatedUser;
 
       [Bindable]
-      public var loginTypeArray:ArrayCollection = new ArrayCollection([
+      public var loginTypeArray : ArrayCollection = new ArrayCollection([
         {label: 'Administrator', type: 1},
         {label: 'Reseller', type: 2},
         {label: 'Client', type: 3},
@@ -39,11 +39,9 @@
         authButton.addEventListener( MouseEvent.CLICK, submitForm );
         authForm.addEventListener( KeyboardEvent.KEY_DOWN, submitFormEnterKey );
 
-        // Set focus on username
-        username.setFocus();
-
         // Re-login? Select the correct Login type
-        if ( user != null ) {
+        if ( user.username != '' ) {
+          //Alert.show(user as String);
           authButton.enabled = true;
           for ( var i:int=0; i&lt;loginTypeArray.source.length; i++ ) {
             if ( loginTypeArray.getItemAt(i).type ==  user.loginType ) {
@@ -52,6 +50,9 @@
             }
           }
           password.setFocus();
+        } else {
+          // Set focus on username
+          username.setFocus();
         }
 
       }

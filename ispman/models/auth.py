@@ -7,10 +7,15 @@
 # ==============================================================================
 
 class AuthenticatedUser(object):
-    language = 'en'
 
-    def __init__(self, username=None, password=None, loginType=None,
-                 bind_dn = None):
-        self.username = username.encode('utf-8')
-        self.password = password.encode('utf-8')
-        self.login_type = loginType
+    def __init__(self, *args, **kwargs):
+        if args and kwargs:
+            raise TypeError("Don't pass both arguments and keyword arguments")
+        if args and isinstance(args[0], dict):
+            data = args[0]
+        else:
+            data = kwargs
+        self.username = data.get('username').encode('utf-8')
+        self.password = data.get('password').encode('utf-8')
+        self.login_type = data.get('loginType')
+        self.language = data.get('language', 'en')

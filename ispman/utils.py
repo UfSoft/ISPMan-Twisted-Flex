@@ -7,5 +7,6 @@
 # ==============================================================================
 
 class Hash(dict):
-    def param(self, key):
-        return self.get(key).encode('utf-8')
+    def get(self, key):
+        return dict.get(self, key).encode('utf-8')
+    param = get
