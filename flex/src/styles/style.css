@@ -1,0 +1,84 @@
+@CHARSET "UTF-8";
+
+global {
+  fontSize: 11;
+  modalTransparency: 0.7;
+  modalTransparencyColor: black;
+  modalTransparencyDuration: 100;
+}
+
+Application {
+  paddingTop: 10;
+  paddingRight: 10;
+  paddingBottom: 10;
+  paddingLeft: 10;
+  horizontalGap: 5;
+  verticalGap: 5;
+}
+
+HDividedBox, VDividedBox, Panel {
+  cornerRadius: 5;
+  paddingTop: 5;
+  paddingRight: 5;
+  paddingBottom: 5;
+  paddingLeft: 5;
+}
+
+Panel {
+   roundedBottomCorners: true;
+   cornerRadius: 5;
+   width: '100%';
+   height: '100%';
+   titleStyleName: 'panelHeader';
+   borderAlpha: 0.15;
+}
+.noPadding {
+  paddingTop: 0;
+  paddingRight: 0;
+  paddingBottom: 0;
+  paddingLeft: 0;
+}
+.panelHeader {
+  fontSize: 14;
+  fontWeight: bold;
+  fontStyle: italic;
+}
+
+FormItemLabel {
+  font-weight: bold;
+}
+
+.sensible {
+  fillColors: haloOrange, red;
+  color: white;
+}
+
+/* If you want to add your own fonts, uncomment the folowing lines and embed
+ * your ttf or swf font as described in the Flex docs
+ */
+
+/* embed ttf or swf font as described in the Flex docs */
+@font-face {
+    fontFamily:"Verdana";
+    src: url("fonts/verdana.ttf"); /* Embed from file */
+}
+
+@font-face {
+    fontFamily:"Verdana";
+    src: url("fonts/verdanai.ttf"); /* Embed from file */
+    fontStyle:italic;
+}
+
+@font-face {
+    fontFamily:"Verdana";
+    src: url("fonts/verdanab.ttf"); /* Embed from file */
+    fontStyle:bold;
+}
+
+
+@font-face {
+    fontFamily:"Verdana";
+    src: url("fonts/verdana.swf"); /* Embed from file */
+    fontWeight:bold;
+    fontStyle:italic;
+}
