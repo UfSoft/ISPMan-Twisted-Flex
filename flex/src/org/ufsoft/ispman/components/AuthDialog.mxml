@@ -14,7 +14,9 @@
       import org.ufsoft.ispman.models.AuthenticatedUser;
       import org.ufsoft.ispman.events.AuthenticationEvent;
 
-      public var loginType  : int=1;
+      private var loginType  : int=1;
+      [Bindable]
+      public var user       : AuthenticatedUser;
 
       [Bindable]
       public var loginTypeArray:ArrayCollection = new ArrayCollection([
@@ -39,6 +41,19 @@
 
         // Set focus on username
         username.setFocus();
+
+        // Re-login? Select the correct Login type
+        if ( user != null ) {
+          authButton.enabled = true;
+          for ( var i:int=0; i&lt;loginTypeArray.source.length; i++ ) {
+            if ( loginTypeArray.getItemAt(i).type ==  user.loginType ) {
+              loginTypeCombo.selectedIndex = i;
+              break;
+            }
+          }
+          password.setFocus();
+        }
+
       }
 
       /*
@@ -67,13 +82,13 @@
 
       // Fire the submit form event
       private function submitForm(evt:MouseEvent):void {
-        var user:AuthenticatedUser = new AuthenticatedUser(username.text, password.text, loginType);
+        user = new AuthenticatedUser(username.text, password.text, loginType);
         dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SEND, user));
       }
 
       private function submitFormEnterKey(evt:KeyboardEvent):void {
         if ( evt.keyCode == 13 &amp;&amp; authButton.enabled ) {
-        var user:AuthenticatedUser = new AuthenticatedUser(username.text, password.text, loginType);
+        user = new AuthenticatedUser(username.text, password.text, loginType);
         dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SEND, user));
         }
       }
@@ -81,7 +96,7 @@
 
     <mx:Form id="authForm">
         <mx:FormItem id="usernameItem" label="Username:">
-            <mx:TextInput id="username"/>
+            <mx:TextInput id="username" text="{user.username}"/>
         </mx:FormItem>
         <mx:FormItem id="passwordItem" label="Password:">
             <mx:TextInput id="password" displayAsPassword="true"/>

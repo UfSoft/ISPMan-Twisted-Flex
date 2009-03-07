@@ -18,8 +18,7 @@
 
       private function creationComplete():void {
         var operation: AbstractOperation=parentApplication.getOperation('auth.overview',
-                                                                        overviewSucess,
-                                                                        overviewFailure);;
+                                                                        overviewSucess);
         operation.send();
       }
 

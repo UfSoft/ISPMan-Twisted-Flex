@@ -56,6 +56,9 @@
 
       private function AuthenticationNeeded(event:Event) : void {
         authDialog = new AuthDialog();
+        if ( user ) {
+            authDialog.user = user;
+        }
         authDialog.addEventListener(AuthenticationEvent.SEND, authenticate);
         PopUpManager.addPopUp(authDialog, DisplayObject(this), true);
       }
@@ -170,7 +173,7 @@
        */
       protected function onServiceFault(event : FaultEvent) : void {
         if (event.fault.faultCode == 'AuthenticationNeeded') {
-          dispatchEvent(new Event("AuthenticationNeeded", true));
+          dispatchEvent(new AuthenticationEvent(AuthenticationEvent.NEEDED));
         } else {
           var errorMsg : String=event.fault.faultCode;
           Alert.show(event.fault.faultDetail, errorMsg);
