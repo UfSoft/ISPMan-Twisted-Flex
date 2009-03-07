@@ -3,26 +3,23 @@
           layout="vertical"
           title="ISP Summary"
           width="100%"
-          creationComplete="creationComplete(event)">
+          creationComplete="creationComplete()">
     <mx:Script>
       import mx.controls.Alert;
       import mx.controls.Text;
       import mx.containers.Form;
       import mx.containers.FormItem;
-      import mx.events.FlexEvent;
 
       import mx.rpc.AbstractOperation;
       import mx.rpc.events.FaultEvent;
       import mx.rpc.events.ResultEvent;
-      import mx.rpc.remoting.mxml.RemoteObject;
 
       import org.ufsoft.ispman.events.LoadDataEvent;
 
-      private function creationComplete(event:FlexEvent):void {
-        var remoteObj: RemoteObject=parentApplication.getService();
-        var operation: AbstractOperation=remoteObj.getOperation('auth.overview');
-        operation.addEventListener(FaultEvent.FAULT, overviewFailure);
-        operation.addEventListener(ResultEvent.RESULT, overviewSucess);
+      private function creationComplete():void {
+        var operation: AbstractOperation=parentApplication.getOperation('auth.overview',
+                                                                        overviewSucess,
+                                                                        overviewFailure);;
         operation.send();
       }
 

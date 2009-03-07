@@ -3,7 +3,8 @@
                 layout="vertical"
                 isPopUp="false"
                 creationComplete="creationComplete()"
-                title="Authentication Required">
+                title="Authentication Required"
+                styleName="authWindow">
     <mx:Script>
       import mx.managers.PopUpManager;
       import mx.collections.ArrayCollection;
@@ -51,8 +52,16 @@
       private function submit_Ok(evt:KeyboardEvent):void {
         if ( password.text.length > 0 &amp;&amp; username.text.length > 0) {
           authButton.enabled = true;
+          username.errorString=null;
+          password.errorString=null;
         } else {
           authButton.enabled = false;
+          if ( username.text.length == 0 ) {
+            username.errorString="Username cannot be empty!";
+          }
+          if ( password.text.length == 0 ) {
+            password.errorString="Password cannot be empty!";
+          }
         }
       }
 

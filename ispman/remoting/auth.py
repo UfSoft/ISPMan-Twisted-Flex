@@ -124,16 +124,23 @@ class Authentication(Resource):
         ispman = request.session.ispman
         func = None
         def get_admin_level_data():
+            domains_count = ispman.getDomainsCount()
+            vhosts_count = ispman.getVhostsCount()
+            users_count = ispman.getUsersCount()
+            dbs_count = ispman.getAllDatabaseCount()
             data = [
                 {'label': 'AdminID:', 'data': request.session.user.username },
                 {'label': 'Number of Domains Hosted:',
-                 'data': ispman.getDomainsCount()},
+                 'data': domains_count==None and 'error getting value'
+                         or domains_count},
                 {'label': 'Number of Websites:',
-                 'data': ispman.getVhostsCount()},
+                 'data': vhosts_count==None and 'error getting value'
+                         or vhosts_count},
                 {'label': 'Number of User Accounts:',
-                 'data': ispman.getUsersCount()},
+                 'data': users_count==None and 'error getting value'
+                         or users_count},
                 {'label': 'Number of Databases:',
-                 'data': ispman.getAllDatabaseCount()}
+                 'data': dbs_count==None and 'error getting value' or dbs_count}
             ]
             return data
 

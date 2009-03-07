@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
-                xmlns:cp="components.*"
                 xmlns:controls="org.ufsoft.ispman.controls.*"
                 layout="absolute"
                 label="ISPMan"
@@ -28,10 +27,10 @@
       import org.ufsoft.ispman.models.AuthenticatedUser;
       import org.ufsoft.ispman.events.LoadDataEvent;
       import org.ufsoft.ispman.events.AuthenticationEvent;
-      import components.AuthDialog;
-      import components.Overview;
-      import components.domains.ManageDomain;
-      import components.processes.ProcessesOverview;
+      import org.ufsoft.ispman.components.AuthDialog;
+      import org.ufsoft.ispman.components.Overview;
+      import org.ufsoft.ispman.components.domains.ManageDomain;
+      import org.ufsoft.ispman.components.processes.ProcessesOverview;
 
       // VARS
       private var authDialog    : AuthDialog;
@@ -117,11 +116,6 @@
 
       private function loadDataForEventSucess(event:ResultEvent) : void {
         availableDomains = event.result as ArrayCollection;
-        /*var items:Array = new Array();
-        for each ( var item:Object in event.result ) {
-            items.push(item);
-        }
-        availableDomains = new ArrayCollection(items);*/
       }
 
       /*

@@ -4,18 +4,13 @@
          width="100%" height="100%" verticalScrollPolicy="off">
     <mx:Script>
       import flash.events.Event;
+
       import mx.controls.Alert;
       import mx.collections.ArrayCollection;
-      import mx.events.ListEvent;
-
 
       import mx.rpc.AbstractOperation;
-      import mx.rpc.events.FaultEvent;
       import mx.rpc.events.ResultEvent;
-      import mx.rpc.remoting.mxml.RemoteObject;
 
-
-      private var remoteObj: RemoteObject;
 
       [Bindable]
       public var processes      : ArrayCollection;
@@ -37,21 +32,20 @@
         processesList.addEventListener("change", updateStatusCombo);
         processesList.addEventListener("change", updateHostsCombo);
 
-        remoteObj = parentApplication.getService();
         dispatchEvent(new Event("updateHosts"));
         dispatchEvent(new Event("updateProcesses"));
       }
 
       private function updateProcessesEvent(event:Event):void {
-        var process_operation : AbstractOperation=remoteObj.getOperation('processes.get_processes');
-        process_operation.addEventListener(ResultEvent.RESULT, updateProcessesArray);
-        process_operation.send();
+        var operation : AbstractOperation=parentApplication.getOperation('processes.get_processes',
+                                                                         updateProcessesArray);
+        operation.send();
       }
 
       private function updateHostsEvent(event:Event):void {
-        var hosts_operation : AbstractOperation=remoteObj.getOperation('hosts.get_hosts');
-        hosts_operation.addEventListener(ResultEvent.RESULT, populateHosts);
-        hosts_operation.send();
+        var operation : AbstractOperation=parentApplication.getOperation('hosts.get_hosts',
+                                                                         populateHosts);
+        operation.send();
       }
 
       private function populateHosts(event:ResultEvent):void {
@@ -101,9 +95,9 @@
           Alert.show("No process selected");
           return;
         }
-        var delete_operation : AbstractOperation=remoteObj.getOperation('processes.delete_process');
-        delete_operation.addEventListener(ResultEvent.RESULT, deleteProcessSucess);
-        delete_operation.send(processesList.selectedItem);
+        var operation : AbstractOperation=parentApplication.getOperation('processes.delete_process',
+                                                                         deleteProcessSucess);
+        operation.send(processesList.selectedItem);
       }
 
       private function deleteProcessSucess(event:ResultEvent):void {
@@ -122,8 +116,8 @@
         process.ispmanStatus = ispmanStatusCombo.selectedItem.status;
         process.ispmanHostName = ispmanHostnameCombo.selectedItem.ispmanHostName;
 
-        var operation : AbstractOperation=remoteObj.getOperation('processes.update_process');
-        operation.addEventListener(ResultEvent.RESULT, updateProcessSucess);
+        var operation : AbstractOperation=parentApplication.getOperation('processes.update_process',
+                                                                         updateProcessSucess);
         operation.send(processesList.selectedItem);
       }
 
