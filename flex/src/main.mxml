@@ -63,10 +63,9 @@
 
       protected function authenticate(event:AuthenticationEvent) : void {
         user = event.user;
-        var remoteObj : RemoteObject=getService();
-        var operation : AbstractOperation=remoteObj.getOperation('auth.login');
-        operation.addEventListener(FaultEvent.FAULT, authenticateFailure);
-        operation.addEventListener(ResultEvent.RESULT, authenticateSuccess);
+        var operation: AbstractOperation=getOperation('auth.login',
+                                                      authenticateSuccess,
+                                                      authenticateFailure);
         operation.send(event.user);
       }
 
@@ -102,10 +101,7 @@
       }
 
       protected function doLogout(event:Event) : void {
-        var remoteObj : RemoteObject=getService();
-        var operation : AbstractOperation=remoteObj.getOperation('auth.logout');
-        operation.addEventListener(ResultEvent.RESULT, doLogoutSucess);
-        operation.addEventListener(FaultEvent.FAULT, onServiceFault);
+        var operation: AbstractOperation=getOperation('auth.logout', doLogoutSucess);
         operation.send();
       }
 
@@ -115,10 +111,7 @@
       }
 
       private function loadDataForEvent(event:LoadDataEvent) : void {
-        var remoteObj : RemoteObject=getService();
-        var operation : AbstractOperation=remoteObj.getOperation(event.endpoint);
-        operation.addEventListener(ResultEvent.RESULT, loadDataForEventSucess);
-        operation.addEventListener(FaultEvent.FAULT, onServiceFault);
+        var operation: AbstractOperation=getOperation(event.endpoint, loadDataForEventSucess);
         operation.send();
       }
 
@@ -158,6 +151,22 @@
         remoteObject.channelSet = channels;
         remoteObject.addEventListener(FaultEvent.FAULT, onServiceFault);
         return remoteObject;
+      }
+
+      public function getOperation(
+        endpoint:String,
+        successListenerFunction:Function,
+        failureListenerFunction:Function=null):AbstractOperation
+      {
+        var remoteObj : RemoteObject=getService();
+        var operation : AbstractOperation=remoteObj.getOperation(endpoint);
+        operation.addEventListener(ResultEvent.RESULT, successListenerFunction);
+        if ( failureListenerFunction!=null ) {
+          operation.addEventListener(FaultEvent.FAULT, failureListenerFunction);
+        } else {
+          operation.addEventListener(FaultEvent.FAULT, onServiceFault);
+        }
+        return operation
       }
 
       /**
