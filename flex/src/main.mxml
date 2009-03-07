@@ -108,8 +108,9 @@
       }
 
       protected function doLogoutSucess(event:ResultEvent) : void {
-        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.NEEDED));
+        user = null;
         logout.enabled = false;
+        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.NEEDED));
       }
 
       private function loadDataForEvent(event:LoadDataEvent) : void {

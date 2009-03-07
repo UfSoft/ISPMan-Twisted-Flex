@@ -9,14 +9,12 @@
       import mx.rpc.AbstractOperation;
       import mx.rpc.events.FaultEvent;
       import mx.rpc.events.ResultEvent;
-      import mx.rpc.remoting.mxml.RemoteObject;
 
       import org.ufsoft.ispman.events.LoadDataEvent;
       import org.ufsoft.ispman.events.AuthenticationEvent;
 
       private const TIMER_INTERVAL : int=30 * 1000; // 30 seconds
       private var t                : Timer;
-      private var _remoteObj       : RemoteObject;
       private var _operation       : AbstractOperation;
 
       private function creationComplete():void {
@@ -38,12 +36,9 @@
       }
 
       private function checkProcesses(event:Event=null):void {
-        if ( ! _remoteObj ) {
-          _remoteObj = parentApplication.getService();
-        }
         if ( ! _operation ) {
-         _operation = _remoteObj.getOperation('processes.count');
-         _operation.addEventListener(ResultEvent.RESULT, updateProcesses);
+          _operation = parentApplication.getOperation('processes.count',
+                                                      updateProcesses);
         }
         _operation.send();
       }
