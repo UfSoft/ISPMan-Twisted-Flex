@@ -139,6 +139,23 @@ class ISPManFactory(Site):
     def get_ispman(self):
         ispman = perl.eval('$ENV{"HTTP_USER_AGENT"} = "FLEX-CP"; '
                            '$ispman = ISPMan->new() or die "$@"')
+#        print dict(ispman.getUsers('demo.ufsoft.org'))
+        from ispman.models.user import DomainUser
+        for dn, details_hash in dict(ispman.getUsers('demo1.ufsoft.org',
+              ('uid', 'dn', 'givenName', 'sn', 'cn', 'ispmanCreateTimestamp',
+              'ispmanUserId', 'mailLocalAddress', 'userPassword',
+              'mailForwardingAddress', 'mailQuota', 'mailAlias',
+              'FTPQuotaMBytes', 'FTPStatus'))).iteritems():
+            print dict(details_hash)
+#            for k, v in dict(details_hash).iteritems():
+#                if k=='uid':
+#                    print k, list(v)
+#                else:
+#                    print k, v
+            i = DomainUser(dn, details_hash)
+            print 1, i
+            for k, v in  i.__dict__.iteritems():
+                print k, v
         return ispman
 
     def get_ldap(self):

@@ -8,5 +8,23 @@
 
 class Hash(dict):
     def get(self, key):
-        return dict.get(self, key).encode('utf-8')
+        value = dict.get(self, key)
+        if isinstance(value, unicode):
+            value = value.encode('utf-8')
+        return value
     param = get
+
+    def getlist(self, key):
+        values = self.get(key)
+        if isinstance(values, basestring):
+            return values
+        elif not values:
+            return ()
+        values = tuple(values)
+        for idx, value in enumerate(values):
+            if isinstance(value, unicode):
+                values[idx] = value.encode('utf-8')
+        return values
+
+    def getint(self, key):
+        return int(self.get(key))

@@ -127,6 +127,7 @@
        */
       private function domainChange(event:Event):void {
         manageDomain = new ManageDomain();
+        manageDomain.domain = chooseDomain.selectedItem;
         switchContent(manageDomain);
       }
 

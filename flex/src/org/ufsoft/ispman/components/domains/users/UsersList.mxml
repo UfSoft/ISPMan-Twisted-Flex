@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml"
+          xmlns:controls="org.ufsoft.ispman.controls.*"
+          width="100%"
+          title="Domain Users"
+          creationComplete="creationComplete()">
+    <mx:Script>
+      import flash.events.Event;
+
+
+      [Event(name="LoadUsers", type="Event")
+      [Event(name="UpdateUsers", type="Event")
+
+      private function creationComplete():void {
+        addEventListener("LoadUsers", loadUsers");
+        addEventListener("UpdateUsers", updateUsers");
+
+        dispatchEvent(new Event("loadUsers"));
+      }
+
+      private function loadUsers(event:Event):void {
+        dispatchEvent(new Event("updateUsers"));
+      }
+
+      private function updateUsers(event:Event):void {
+      }
+
+      private function styleFunction(item:Object, rowIndex:int,
+                                     dataIndex:int, color:uint):uint {
+        /*if ( item.ispmanStatus == 'new' ) {
+          return 0xCCFFCC;
+        }
+        if ( item.ispmanStatus == 'error') {
+          return 0xFFCCCC;
+        }*/
+        return color;
+      }
+    </mx:Script>
+    <controls:RowColorDataGrid id="processesList" rowCount="1" width="100%"
+                               dataProvider="{processes}" rowColorFunction="styleFunction">
+        <controls:columns>
+            <mx:DataGridColumn dataField="uid" headerText="UID"/>
+            <mx:DataGridColumn dataField="cn" headerText="Name"/>
+            <mx:DataGridColumn dataField="sn" headerText="Surname"/>
+            <mx:DataGridColumn dataField="mailLocalAddress" headerText="Local Mail Address"/>
+            <mx:DataGridColumn dataField="FTPStatus" headerText="FTP Status"/>
+            <mx:DataGridColumn dataField="FTPQuotaMBytes" headerText="FTP Quota"/>
+            <mx:DataGridColumn dataField="ispmanCreateTimestamp" headerText="Created"/>
+        </controls:columns>
+    </controls:RowColorDataGrid>
+</mx:Panel>
