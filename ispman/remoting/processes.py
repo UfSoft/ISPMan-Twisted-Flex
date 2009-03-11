@@ -6,7 +6,6 @@
 # License: BSD - Please view the LICENSE file for additional information.
 # ==============================================================================
 
-from pyamf.flex import ArrayCollection
 from ispman.remoting import *
 
 log = logging.getLogger(__name__)

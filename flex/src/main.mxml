@@ -24,6 +24,8 @@
       import mx.rpc.events.ResultEvent;
       import mx.rpc.remoting.mxml.RemoteObject;
 
+      import net.zengrong.logging.Logger;
+
       import org.ufsoft.ispman.models.AuthenticatedUser;
       import org.ufsoft.ispman.events.LoadDataEvent;
       import org.ufsoft.ispman.events.AuthenticationEvent;
@@ -44,6 +46,8 @@
       private var availableDomains   : ArrayCollection;
 
       private function creationComplete(event:FlexEvent) : void {
+        Logger.TYPE = Logger.FIREBUG;
+        Logger.debug("We have lift off!");
         addEventListener(AuthenticationEvent.NEEDED, AuthenticationNeeded);
         addEventListener(LoadDataEvent.LOAD, loadDataForEvent);
         addEventListener(AuthenticationEvent.SEND, authenticate);
@@ -134,6 +138,7 @@
       private function loadProcessesOverview(event:Event):void {
         processesOverview = new ProcessesOverview();
         switchContent(processesOverview);
+        chooseDomain.selectedIndex = -1;
       }
 
       public function getService() : RemoteObject {

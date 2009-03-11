@@ -13,6 +13,8 @@
       import org.ufsoft.ispman.events.LoadDataEvent;
       import org.ufsoft.ispman.events.AuthenticationEvent;
 
+      import net.zengrong.logging.Firebug;
+
       private const TIMER_INTERVAL : int=30 * 1000; // 30 seconds
       private var t                : Timer;
       private var _operation       : AbstractOperation;
@@ -25,6 +27,7 @@
         parentApplication.addEventListener(AuthenticationEvent.FAILURE, stopTimer);
         parentApplication.addEventListener(AuthenticationEvent.NEEDED, stopTimer);
         parentApplication.addEventListener(AuthenticationEvent.SUCESS, checkProcesses);
+        Firebug.debug("ProcessButton Started!");
       }
 
       private function startTimer(event:AuthenticationEvent):void {

@@ -33,6 +33,7 @@
 
       private function showUsersList(event:Event):void {
         if ( ! usersList ) { usersList = new UsersList() }
+        usersList.domain = domain;
         switchContent(usersList);
       }
 

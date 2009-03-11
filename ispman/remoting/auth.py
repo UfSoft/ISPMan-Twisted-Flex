@@ -27,7 +27,6 @@ class Authentication(Resource):
     @expose_request
     def login(self, request, user):
         def failure(exception):
-            print exception
             raise AuthenticationNeeded
         d = deferToThread(self._login, request, AuthenticatedUser(user))
         d.addErrback(failure)

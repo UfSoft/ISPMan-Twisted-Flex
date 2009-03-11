@@ -24,8 +24,10 @@ from pyamf.remoting.gateway.twisted import TwistedGateway
 
 from ispman.services import services
 from ispman.remoting.auth import AuthenticationNeeded
+
 # ISPMan Models
 from ispman.models.auth import AuthenticatedUser
+from ispman.models.user import DomainUser
 
 import logging
 import perl
@@ -46,7 +48,6 @@ class ISPManFactory(Site):
         Site.__init__(self, resource, logPath, timeout)
         self.config = config
 
-
     def setup_pyamf(self):
         # Setup PyAMF
         # Set this to true so that returned objects and arrays are bindable
@@ -55,6 +56,7 @@ class ISPManFactory(Site):
         #
         pyamf.register_class(
             AuthenticatedUser, "%s.AuthenticatedUser" % MODELS_NAMESPACE)
+        pyamf.register_class(DomainUser, "%s.DomainUser" % MODELS_NAMESPACE)
 
     def build_resources(self, config):
         resource = Resource()
@@ -76,6 +78,12 @@ class ISPManFactory(Site):
                     # Serve index.html from /
                     filename = ''
                 resource.putChild(filename, File(filepath))
+
+#        # Setup serving the gettext catalogs
+#        locales = Resource()
+#        for locale, locale_path in config.locales.iteritems():
+#            locales.putChild(locale, File(locale_path))
+#        resource.putChild('locale', locales)
 
         gateway = TwistedGateway(services, expose_request=False,
                                  preprocessor=self.preprocessor)

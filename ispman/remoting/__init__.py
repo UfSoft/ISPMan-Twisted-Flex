@@ -12,6 +12,7 @@ from twisted.web.resource import Resource
 from pyamf.remoting.gateway import expose_request
 from ispman.decorators import utf8
 from ispman.utils import Hash
+from pyamf.flex import ArrayCollection
 
 __all__ = ['logging', 'defer', 'deferToThread', 'expose_request', 'Resource',
-           'utf8', 'Hash']
+           'utf8', 'Hash', 'ArrayCollection']

@@ -26,6 +26,14 @@
         {label: 'Domain', type: 4},
       ]);
 
+      /*
+      [Bindable]
+      public var languagesArray : ArrayCollection = new ArrayCollection([
+        {label: 'English', locale: 'en', url: 'https://{server.name}:{server.port}/locale/en'},
+        {label: 'Português', locale: 'pt_PT', url: 'https://{server.name}:{server.port}/locale/pt_PT'}
+      ]); */
+
+
       protected function creationComplete():void {
         PopUpManager.centerPopUp(this); // center the popup
 
@@ -54,7 +62,6 @@
           // Set focus on username
           username.setFocus();
         }
-
       }
 
       /*
@@ -106,6 +113,12 @@
             <mx:ComboBox id="loginTypeCombo" dataProvider="{loginTypeArray}"
                          labelField="label" change="loginTypeSelect(event)"/>
         </mx:FormItem>
+        <!--
+             <mx:FormItem id="language" label="Language:">
+             <mx:ComboBox id="languageCombo" dataProvider="{languagesArray}"
+             labelField="label"/>
+             </mx:FormItem>
+        -->
         <mx:Button label="Authenticate" id ="authButton" enabled="false" width="100%"/>
         <mx:TextArea width="100%" height="100" textAlign="justify" condenseWhite="true">
             <mx:htmlText><![CDATA[

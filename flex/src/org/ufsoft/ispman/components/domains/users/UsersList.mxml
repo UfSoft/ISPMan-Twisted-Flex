@@ -2,27 +2,45 @@
 <mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml"
           xmlns:controls="org.ufsoft.ispman.controls.*"
           width="100%"
+          height="100%"
           title="Domain Users"
-          creationComplete="creationComplete()">
+          creationComplete="creationComplete()"
+          styleName="noPadding">
     <mx:Script>
       import flash.events.Event;
+      import mx.controls.Alert;
+      import mx.controls.dataGridClasses.DataGridColumn;
+
+      import mx.collections.ArrayCollection;
+
+      import mx.rpc.AbstractOperation;
+      import mx.rpc.events.ResultEvent;
+      import org.ufsoft.ispman.models.DomainUser;
 
 
-      [Event(name="LoadUsers", type="Event")
-      [Event(name="UpdateUsers", type="Event")
+      [Bindable]
+      private var usersList: ArrayCollection;
+      public var domain: Object;
+
+      [Event(name="LoadUsers", type="Event")]
+      //[Event(name="UpdateUsers", type="Event")]
 
       private function creationComplete():void {
-        addEventListener("LoadUsers", loadUsers");
-        addEventListener("UpdateUsers", updateUsers");
+        addEventListener("LoadUsers", loadUsers);
+        addEventListener("UpdateUsers", updateUsers);
 
-        dispatchEvent(new Event("loadUsers"));
+        dispatchEvent(new Event("LoadUsers"));
       }
 
       private function loadUsers(event:Event):void {
-        dispatchEvent(new Event("updateUsers"));
+        var operation : AbstractOperation=parentApplication.getOperation('domains.get_users',
+                                                                         updateUsers);
+        operation.send(domain);
+        //dispatchEvent(new Event("updateUsers"));
       }
 
-      private function updateUsers(event:Event):void {
+      private function updateUsers(event:ResultEvent):void {
+        usersList = event.result as ArrayCollection;
       }
 
       private function styleFunction(item:Object, rowIndex:int,
@@ -35,17 +53,39 @@
         }*/
         return color;
       }
+
+      public function getUID(item:Object, column:DataGridColumn):String {
+        //Alert.show('1:' + item.uid[0]);
+        //Alert.show('2:' + item.getUID());
+        return item.uid[0] + '\n' + item.uid[1];
+      }
+
+      public function formatTimestamp(item:Object, column:DataGridColumn):String {
+        var date:Date = new Date(item.ispmanCreateTimestamp*1000);
+        //return date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
+        return date.toString();
+      }
+
     </mx:Script>
-    <controls:RowColorDataGrid id="processesList" rowCount="1" width="100%"
-                               dataProvider="{processes}" rowColorFunction="styleFunction">
+    <controls:RowColorDataGrid id="usersListDataGrid" rowCount="1" width="100%" height="100%"
+                               dataProvider="{usersList}" rowColorFunction="styleFunction">
         <controls:columns>
-            <mx:DataGridColumn dataField="uid" headerText="UID"/>
+            <mx:DataGridColumn dataField="uid" labelFunction="getUID" headerText="UID"/>
             <mx:DataGridColumn dataField="cn" headerText="Name"/>
-            <mx:DataGridColumn dataField="sn" headerText="Surname"/>
             <mx:DataGridColumn dataField="mailLocalAddress" headerText="Local Mail Address"/>
             <mx:DataGridColumn dataField="FTPStatus" headerText="FTP Status"/>
             <mx:DataGridColumn dataField="FTPQuotaMBytes" headerText="FTP Quota"/>
-            <mx:DataGridColumn dataField="ispmanCreateTimestamp" headerText="Created"/>
+            <mx:DataGridColumn dataField="mailQuota" headerText="Mail Quota"/>
+            <mx:DataGridColumn dataField="ispmanCreateTimestamp" labelFunction="formatTimestamp" headerText="Created"/>
         </controls:columns>
     </controls:RowColorDataGrid>
+    <mx:ControlBar>
+        <mx:FormItem label="Filter">
+            <mx:TextInput/>
+        </mx:FormItem>
+        <mx:Spacer width="100%"/>
+        <mx:Button id="deleteUserButton" label="Delete User" styleName="sensible"
+                   click=""/>
+        <mx:Button id="editUserButton" label="Edit User" click=""/>
+    </mx:ControlBar>
 </mx:Panel>

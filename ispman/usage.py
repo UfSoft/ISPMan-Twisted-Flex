@@ -14,8 +14,8 @@ from twisted.internet import reactor, defer
 from twisted.python import usage
 from ConfigParser import SafeConfigParser
 
-from os import makedirs
-from os.path import abspath, basename, expanduser, isdir, isfile, join
+from os import makedirs, listdir
+from os.path import abspath, dirname, basename, expanduser, isdir, isfile, join
 from sys import argv
 from ispman import __version__
 from ispman.factory import ISPManFactory
@@ -66,6 +66,15 @@ class ISPManOptions(usage.Options):
         config.server_port = parser.getint('ispman', 'server_port')
         config.privatekey_file = parser.get('ispman', 'privatekey_file')
         config.certificate_file = parser.get('ispman', 'certificate_file')
+
+#        config.locales = {}
+#        locales_path = join(dirname(__file__), 'locale')
+#        for locale in listdir(locales_path):
+#            locale_file = join(locales_path, locale, 'LC_MESSAGES',
+#                               'messages.mo')
+#            if isfile(locale_file):
+#                config.locales[locale] = locale_file
+
 
         factory = ISPManFactory(config)
         return factory

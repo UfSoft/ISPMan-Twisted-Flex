@@ -17,10 +17,10 @@ class Hash(dict):
     def getlist(self, key):
         values = self.get(key)
         if isinstance(values, basestring):
-            return values
+            return [values]
         elif not values:
-            return ()
-        values = tuple(values)
+            return []
+        values = list(values)
         for idx, value in enumerate(values):
             if isinstance(value, unicode):
                 values[idx] = value.encode('utf-8')
