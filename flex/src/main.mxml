@@ -6,6 +6,7 @@
                 pageTitle="ISPMan"
                 width="100%"
                 height="100%"
+                initialize="setupInitialLocale(event)"
                 creationComplete="creationComplete(event)">
 
     <mx:Style source="styles/style.css" />
@@ -17,6 +18,10 @@
       import mx.managers.PopUpManager;
       import flash.display.DisplayObject;
 
+      import mx.resources.ResourceBundle;
+      import mx.events.ResourceEvent;
+
+
       import mx.messaging.ChannelSet;
       import mx.messaging.channels.SecureAMFChannel;
       import mx.rpc.AbstractOperation;
@@ -24,11 +29,13 @@
       import mx.rpc.events.ResultEvent;
       import mx.rpc.remoting.mxml.RemoteObject;
 
-      import net.zengrong.logging.Logger;
+      import net.zengrong.logging.Firebug;
 
+      import org.ufsoft.ispman.i18n.Locale;
       import org.ufsoft.ispman.models.AuthenticatedUser;
       import org.ufsoft.ispman.events.LoadDataEvent;
       import org.ufsoft.ispman.events.AuthenticationEvent;
+      import org.ufsoft.ispman.events.TranslationEvent;
       import org.ufsoft.ispman.components.AuthDialog;
       import org.ufsoft.ispman.components.Overview;
       import org.ufsoft.ispman.components.domains.ManageDomain;
@@ -45,9 +52,18 @@
       [Bindable]
       private var availableDomains   : ArrayCollection;
 
+      private var locale:Locale
+
+      private function setupInitialLocale(event:FlexEvent):void {
+        locale = Locale.getInstance()
+        locale.addEventListener(TranslationEvent.LOADED, updateComboPrompt)
+        locale.load('en_US');
+      }
+
       private function creationComplete(event:FlexEvent) : void {
-        Logger.TYPE = Logger.FIREBUG;
-        Logger.debug("We have lift off!");
+
+
+        Firebug.debug("We have lift off!");
         addEventListener(AuthenticationEvent.NEEDED, AuthenticationNeeded);
         addEventListener(LoadDataEvent.LOAD, loadDataForEvent);
         addEventListener(AuthenticationEvent.SEND, authenticate);
@@ -103,7 +119,7 @@
       protected function displayOverview(event:Event):void {
         overview = new Overview();
         switchContent(overview);
-        chooseDomain.selectedIndex = -1;
+        chooseDomainCombo.selectedIndex = -1;
       }
 
       protected function doLogout(event:Event) : void {
@@ -126,19 +142,23 @@
         availableDomains = event.result as ArrayCollection;
       }
 
+      private function updateComboPrompt(event:TranslationEvent):void {
+        chooseDomainCombo.prompt = resourceManager.getString("ispman", "Choose Domain");
+      }
+
       /*
        * Function to load the selected domain panel
        */
       private function domainChange(event:Event):void {
         manageDomain = new ManageDomain();
-        manageDomain.domain = chooseDomain.selectedItem;
+        manageDomain.domain = chooseDomainCombo.selectedItem;
         switchContent(manageDomain);
       }
 
       private function loadProcessesOverview(event:Event):void {
         processesOverview = new ProcessesOverview();
         switchContent(processesOverview);
-        chooseDomain.selectedIndex = -1;
+        chooseDomainCombo.selectedIndex = -1;
       }
 
       public function getService() : RemoteObject {
@@ -190,14 +210,18 @@
     </mx:Script>
     <mx:ApplicationControlBar width="100%" dock="true" id="appCB">
         <mx:HBox width="100%">
-            <mx:Button id="overviewButton" label="Overview" click="displayOverview(event)"/>
-            <mx:ComboBox id="chooseDomain" prompt="Choose Domain"
+            <mx:Button id="overviewButton"
+                       label='{resourceManager.getString("ispman", "Overview")}'
+                       click="displayOverview(event)"/>
+            <mx:ComboBox id="chooseDomainCombo"
+                         prompt="Choose Domain"
                          labelField="label" dataProvider="{availableDomains}"
                          change="domainChange(event)"/>
             <mx:Spacer width="100%"/>
             <controls:ProcessesButton click="loadProcessesOverview(event)"/>
             <mx:Button id="ispman_home" label="ISPMan Home"/>
-            <mx:Button id="logout" label="Logout"/>
+            <mx:Button id="logout"
+                       label='{resourceManager.getString("ispman", "Logout")}'/>
         </mx:HBox>
     </mx:ApplicationControlBar>
     <mx:HDividedBox id="mainContent" width="100%" height="100%">

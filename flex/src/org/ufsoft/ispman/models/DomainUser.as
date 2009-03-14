@@ -10,7 +10,7 @@ package org.ufsoft.ispman.models {
     public var cn                    : String;
     public var ispmanUserID          : String;
     public var mailLocalAddress      : String;
-    private var userPassword          : String;
+    private var userPassword         : String;
     public var mailForwardingAddress : Array;
     public var FTPStatus             : String;
     public var FTPQuotaMBytes        : int;

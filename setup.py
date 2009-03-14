@@ -37,8 +37,8 @@ setup(name=ispman.__package__,
             ('**.py', 'python', None)
         ],
         'flex': [
-            ('**.as', 'javascript', None),
-            ('**.mxml', 'javascript', None),
+            ('**.as', 'ispman.utils:extract_actionscript', None),
+            ('**.mxml', 'ispman.utils:extract_mxml', None),
         ]
       },
       entry_points = {

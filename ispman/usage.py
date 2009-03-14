@@ -14,6 +14,7 @@ from twisted.internet import reactor, defer
 from twisted.python import usage
 from ConfigParser import SafeConfigParser
 
+from babel.core import Locale
 from os import makedirs, listdir
 from os.path import abspath, dirname, basename, expanduser, isdir, isfile, join
 from sys import argv
@@ -67,17 +68,18 @@ class ISPManOptions(usage.Options):
         config.privatekey_file = parser.get('ispman', 'privatekey_file')
         config.certificate_file = parser.get('ispman', 'certificate_file')
 
-#        config.locales = {}
-#        locales_path = join(dirname(__file__), 'locale')
-#        for locale in listdir(locales_path):
-#            locale_file = join(locales_path, locale, 'LC_MESSAGES',
-#                               'messages.mo')
-#            if isfile(locale_file):
-#                config.locales[locale] = locale_file
+        config.locales = {}
+        locales_path = join(dirname(__file__), 'locale')
+        for locale in listdir(locales_path):
+            locale_file = join(locales_path, locale, 'LC_MESSAGES',
+                               'messages.mo')
+            if isfile(locale_file):
+                config.locales[locale] = {
+                    'path': locale_file,
+                    'name': Locale.parse(locale).display_name
+                }
 
-
-        factory = ISPManFactory(config)
-        return factory
+        return ISPManFactory(config)
 
 class ISPManService(object):
     implements(IServiceMaker, IPlugin)
@@ -91,24 +93,9 @@ class ISPManService(object):
 
         factory = options.getService(options)
 
-#        def init_factory():
-#            factory.init_perl()
-#            internet.SSLServer(config.server_port,
-#                               factory, factory).setServiceParent(services)
-#            return services
-#
-#        def init_failed():
-#            print "Failed to setup Factory"
-#            sys.exit()
-#        deferred = defer.Deferred()
-#        deferred.addCallback(init_factory).addErrback(init_failed)
-##        reactor.callLater(0.1, deferred)
-
         factory.init_perl()
-        internet.SSLServer(config.server_port,
-                           factory, factory).setServiceParent(services)
-#        #internet.SSLServer(843, factory, factory).setServiceParent(services)
-#
+        internet.SSLServer(
+            config.server_port, factory, factory).setServiceParent(services)#
         return services
 
 

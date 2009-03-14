@@ -190,7 +190,8 @@ class ISPManFactory(Site):
             if not request.session:
                 request.getSession()
             request.factory = self
-            if service_request.method == 'login':
+            if service_request.method in ('login', 'get_translations',
+                                          'get_locales'):
                 return
             try:
                 return request.session.authenticated
