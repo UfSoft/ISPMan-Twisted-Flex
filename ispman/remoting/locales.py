@@ -20,8 +20,11 @@ class LocalesResource(Resource):
             locale = request.factory.config.locales.get(sent_locale)
             catalog = read_mo(open(locale.get('path'), 'rb'))
             for msg in list(catalog)[1:]:
-                translations.append({'msgid': msg.id, 'msgstr': msg.string})
+                translations.append(
+                    {'msgid': msg.id,
+                     'msgstr': msg.string and msg.string or msg.id})
             return translations
+
         return defer.maybeDeferred(_get_translations)
 
     @expose_request
