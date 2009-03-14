@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ISPManCP 0.5\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2009-03-14 12:04+0000\n"
-"PO-Revision-Date: 2009-03-14 12:09+0000\n"
+"POT-Creation-Date: 2009-03-14 20:21+0000\n"
+"PO-Revision-Date: 2009-03-14 20:22+0000\n"
 "Last-Translator: Pedro Algarvio <ufs@ufsoft.org>\n"
 "Language-Team: pt <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -17,55 +17,258 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev-r467\n"
 
-#: flex/src/main.mxml:213
+#: flex/src/main.mxml:318
+msgid "Authentication Failed {0}"
+msgstr "Autenticação Falhou {0}"
+
+#: flex/src/main.mxml:367
 msgid "Choose Domain"
 msgstr "Seleccione Domínio"
 
-#: flex/src/main.mxml:218
+#: flex/src/main.mxml:227
 msgid "Overview"
 msgstr "Detalhes"
 
-#: flex/src/main.mxml:227
+#: flex/src/main.mxml:235
+msgid "ISPMan Site"
+msgstr "Site ISPMan"
+
+#: flex/src/main.mxml:237
 msgid "Logout"
 msgstr "Sair"
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:136
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:127
 msgid "Username:"
 msgstr "Nome de Utilizador:"
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:140
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:131
 msgid "Password:"
 msgstr "Palavra-Passe:"
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:146
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:136
 msgid "Administrator"
 msgstr "Administrador"
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:147
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:137
 msgid "Reseller"
 msgstr "Revendedor"
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:148
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:138
 msgid "Client"
 msgstr "Cliente"
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:149
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:139
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:161
 msgid "Domain"
 msgstr "Domínio"
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:152
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:142
 msgid "Login as:"
 msgstr "Autenticar como:"
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:157
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:147
 msgid "Language:"
 msgstr "Linguagem:"
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:159
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:149
 msgid "Authenticate"
 msgstr "Autenticar"
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:178
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:168
 msgid "Authentication Required"
 msgstr "Autenticação Necessária"
+
+#: flex/src/org/ufsoft/ispman/components/Overview.mxml:47
+msgid "ISP Summary"
+msgstr "Sumário do ISP"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:43
+msgid "Edit Domain"
+msgstr "Editar Domínio"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:49
+msgid "SOA Records"
+msgstr "Registos SOA"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:51
+msgid "MX Records"
+msgstr "Registos MX"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:53
+msgid "NS Records"
+msgstr "Registos NS"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:55
+msgid "A Records"
+msgstr "Registos A"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:57
+msgid "AAAA Records"
+msgstr "Registos AAAA"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:59
+msgid "TXT Records"
+msgstr "Registos TXT"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:61
+msgid "Manage DNS"
+msgstr "Gerir DNS"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:65
+msgid "Show Users"
+msgstr "Exibir Utilizadores"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:69
+msgid "Search"
+msgstr "Procurar"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:71
+msgid "Manage Users"
+msgstr "Gerir Utilizadores"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:74
+msgid "Manage Mailgroups"
+msgstr "Gerir Grupos de Mail"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:77
+msgid "Manage Web Users"
+msgstr "Gerir Utilizadores Web"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:80
+msgid "Manage Virtual Hosts"
+msgstr "Gerir Hosts Virtuais"
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:82
+msgid "Manage Domain"
+msgstr "Gerir Domínio"
+
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:75
+msgid "Name"
+msgstr "Nome"
+
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:77
+msgid "FTP Status"
+msgstr "Status FTP"
+
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:78
+msgid "FTP Qouta"
+msgstr "Quota FTP"
+
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:92
+msgid "Domain Users"
+msgstr "Utilizadores do Domínio"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:175
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:194
+msgid "New"
+msgstr "Novo"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:176
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:195
+msgid "In Session"
+msgstr "Em Sessão"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:177
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:196
+msgid "Error"
+msgstr "Erro"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:255
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:270
+msgid "No process selected"
+msgstr "Nenhum processo seleccionado"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:156
+msgid "Session"
+msgstr "Sessão"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:159
+msgid "Host"
+msgstr "Host"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:163
+msgid "Process"
+msgstr "Processo"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:165
+msgid "Status"
+msgstr "Estado FTP"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:167
+msgid "Created By"
+msgstr "Criado Por"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:170
+msgid "Processes Queue"
+msgstr "Lista de Processos"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:177
+msgid "User:"
+msgstr "Utilizador:"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:190
+msgid "Session:"
+msgstr "Sessão:"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:193
+msgid "Status:"
+msgstr "Estado:"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:196
+msgid "Process:"
+msgstr "Processo:"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:199
+msgid "Domain:"
+msgstr "Domínio:"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:209
+msgid "Delete Process"
+msgstr "Apagar Processo"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:212
+msgid "Update Process"
+msgstr "Actualizar Processo"
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:214
+msgid "Process Details"
+msgstr "Detalhes do Processo"
+
+#: flex/src/org/ufsoft/ispman/controls/ProcessesButton.mxml:75
+#: flex/src/org/ufsoft/ispman/controls/ProcessesButton.mxml:104
+msgid "Processes in Queue: {0}"
+msgstr "Processos em Lista: {0}"
+
+#: ispman/remoting/auth.py:123
+msgid "Admin ID:"
+msgstr "ID do Administrador:"
+
+#: ispman/remoting/auth.py:125
+msgid "Number of Domains Hosted:"
+msgstr "Número de Domínios Hospedados:"
+
+#: ispman/remoting/auth.py:126 ispman/remoting/auth.py:129
+#: ispman/remoting/auth.py:132 ispman/remoting/auth.py:135
+msgid "error getting value"
+msgstr "erro ao obter o valor"
+
+#: ispman/remoting/auth.py:128
+msgid "Number of Websites:"
+msgstr "Número de Sites:"
+
+#: ispman/remoting/auth.py:131
+msgid "Number of User Accounts:"
+msgstr "Número de Utilizadores:"
+
+#: ispman/remoting/auth.py:134
+msgid "Number of Databases:"
+msgstr "Número de Bases-de-Dados:"
+
+#: ispman/remoting/auth.py:143
+msgid "Resseler ID:"
+msgstr "ID do Revendedor:"
+
+#: ispman/remoting/auth.py:151
+msgid "Client ID:"
+msgstr "ID do Cliente:"
 

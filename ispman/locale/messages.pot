@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ISPManCP 0.5\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2009-03-14 12:04+0000\n"
+"POT-Creation-Date: 2009-03-14 20:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,55 +17,258 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev-r467\n"
 
-#: flex/src/main.mxml:213
+#: flex/src/main.mxml:318
+msgid "Authentication Failed {0}"
+msgstr ""
+
+#: flex/src/main.mxml:367
 msgid "Choose Domain"
 msgstr ""
 
-#: flex/src/main.mxml:218
+#: flex/src/main.mxml:227
 msgid "Overview"
 msgstr ""
 
-#: flex/src/main.mxml:227
+#: flex/src/main.mxml:235
+msgid "ISPMan Site"
+msgstr ""
+
+#: flex/src/main.mxml:237
 msgid "Logout"
 msgstr ""
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:136
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:127
 msgid "Username:"
 msgstr ""
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:140
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:131
 msgid "Password:"
 msgstr ""
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:146
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:136
 msgid "Administrator"
 msgstr ""
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:147
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:137
 msgid "Reseller"
 msgstr ""
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:148
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:138
 msgid "Client"
 msgstr ""
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:149
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:139
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:161
 msgid "Domain"
 msgstr ""
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:152
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:142
 msgid "Login as:"
 msgstr ""
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:157
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:147
 msgid "Language:"
 msgstr ""
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:159
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:149
 msgid "Authenticate"
 msgstr ""
 
-#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:178
+#: flex/src/org/ufsoft/ispman/components/AuthDialog.mxml:168
 msgid "Authentication Required"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/Overview.mxml:47
+msgid "ISP Summary"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:43
+msgid "Edit Domain"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:49
+msgid "SOA Records"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:51
+msgid "MX Records"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:53
+msgid "NS Records"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:55
+msgid "A Records"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:57
+msgid "AAAA Records"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:59
+msgid "TXT Records"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:61
+msgid "Manage DNS"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:65
+msgid "Show Users"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:69
+msgid "Search"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:71
+msgid "Manage Users"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:74
+msgid "Manage Mailgroups"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:77
+msgid "Manage Web Users"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:80
+msgid "Manage Virtual Hosts"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:82
+msgid "Manage Domain"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:75
+msgid "Name"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:77
+msgid "FTP Status"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:78
+msgid "FTP Qouta"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:92
+msgid "Domain Users"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:175
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:194
+msgid "New"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:176
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:195
+msgid "In Session"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:177
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:196
+msgid "Error"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:255
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:270
+msgid "No process selected"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:156
+msgid "Session"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:159
+msgid "Host"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:163
+msgid "Process"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:165
+msgid "Status"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:167
+msgid "Created By"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:170
+msgid "Processes Queue"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:177
+msgid "User:"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:190
+msgid "Session:"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:193
+msgid "Status:"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:196
+msgid "Process:"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:199
+msgid "Domain:"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:209
+msgid "Delete Process"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:212
+msgid "Update Process"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:214
+msgid "Process Details"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/controls/ProcessesButton.mxml:75
+#: flex/src/org/ufsoft/ispman/controls/ProcessesButton.mxml:104
+msgid "Processes in Queue: {0}"
+msgstr ""
+
+#: ispman/remoting/auth.py:123
+msgid "Admin ID:"
+msgstr ""
+
+#: ispman/remoting/auth.py:125
+msgid "Number of Domains Hosted:"
+msgstr ""
+
+#: ispman/remoting/auth.py:126 ispman/remoting/auth.py:129
+#: ispman/remoting/auth.py:132 ispman/remoting/auth.py:135
+msgid "error getting value"
+msgstr ""
+
+#: ispman/remoting/auth.py:128
+msgid "Number of Websites:"
+msgstr ""
+
+#: ispman/remoting/auth.py:131
+msgid "Number of User Accounts:"
+msgstr ""
+
+#: ispman/remoting/auth.py:134
+msgid "Number of Databases:"
+msgstr ""
+
+#: ispman/remoting/auth.py:143
+msgid "Resseler ID:"
+msgstr ""
+
+#: ispman/remoting/auth.py:151
+msgid "Client ID:"
 msgstr ""
 
