@@ -27,6 +27,7 @@ class Authentication(Resource):
     @expose_request
     def login(self, request, user):
         def failure(exception):
+            log.error(exception)
             raise AuthenticationNeeded
         d = deferToThread(self._login, request, AuthenticatedUser(user))
         d.addErrback(failure)
@@ -90,7 +91,7 @@ class Authentication(Resource):
         ispman_session.update({
             'uid': user.username,
             'logintype': ROLES_MAP[user.login_type],
-            'language': user.language,
+            'language': user.locale,
         })
         ispman['session'] = ispman_session
         request.session.ispman = ispman
@@ -116,31 +117,39 @@ class Authentication(Resource):
             vhosts_count = ispman.getVhostsCount()
             users_count = ispman.getUsersCount()
             dbs_count = ispman.getAllDatabaseCount()
+            _ = request.session.translations.gettext
+
             data = [
-                {'label': 'AdminID:', 'data': request.session.user.username },
-                {'label': 'Number of Domains Hosted:',
-                 'data': domains_count==None and 'error getting value'
+                {'label': _('Admin ID:'),
+                 'data': request.session.user.username },
+                {'label': _('Number of Domains Hosted:'),
+                 'data': domains_count==None and _('error getting value')
                          or domains_count},
-                {'label': 'Number of Websites:',
-                 'data': vhosts_count==None and 'error getting value'
+                {'label': _('Number of Websites:'),
+                 'data': vhosts_count==None and _('error getting value')
                          or vhosts_count},
-                {'label': 'Number of User Accounts:',
-                 'data': users_count==None and 'error getting value'
+                {'label': _('Number of User Accounts:'),
+                 'data': users_count==None and _('error getting value')
                          or users_count},
-                {'label': 'Number of Databases:',
-                 'data': dbs_count==None and 'error getting value' or dbs_count}
+                {'label': _('Number of Databases:'),
+                 'data': dbs_count==None and _('error getting value')
+                         or dbs_count}
             ]
             return data
 
         def get_reseller_level_data():
+            _ = request.session.translations.gettext
             data = [
-                {'label': 'ResselerID:', 'data': request.session.user.username },
+                {'label': _('Resseler ID:'),
+                 'data': request.session.user.username },
             ]
             return data
 
         def get_client_level_data():
+            _ = request.session.translations.gettext
             data = [
-                {'label': 'ClientID:', 'data': request.session.user.username },
+                {'label': _('Client ID:'),
+                 'data': request.session.user.username },
             ]
             return data
 
