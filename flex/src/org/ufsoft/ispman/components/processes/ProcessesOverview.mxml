@@ -11,22 +11,33 @@
       import mx.rpc.AbstractOperation;
       import mx.rpc.events.ResultEvent;
 
+      import org.ufsoft.ispman.i18n.Locale;
+      import org.ufsoft.ispman.events.TranslationEvent;
 
+      import net.zengrong.logging.Firebug;
+
+
+      private var locale:Locale;
       [Bindable]
       public var processes      : ArrayCollection;
       [Bindable]
       public var availableHosts : ArrayCollection;
       [Bindable]
-      public var processStatus : ArrayCollection = new ArrayCollection([
-        {label: 'New', status: 'new'},
-        {label: 'In Session', status: 'insession'},
-        {label: 'Error', status: 'error'}
-      ]);
+      public var processStatus : ArrayCollection;
 
       [Event(name="updateProcesses", type="Event")]
       [Event(name="updateHosts", type="Event")]
 
       private function creationComplete():void {
+        processStatus = new ArrayCollection([
+          {label: resourceManager.getString("ispman", "New"), status: 'new'},
+          {label: resourceManager.getString("ispman", "In Session"), status: 'insession'},
+          {label: resourceManager.getString("ispman", "Error"), status: 'error'}
+          ]);
+        locale = Locale.getInstance()
+        locale.addEventListener(TranslationEvent.LOADED, updateProcessStatusLabels);
+        Firebug.debug(0, processStatus);
+
         addEventListener("updateProcesses", updateProcessesEvent);;
         addEventListener("updateHosts", updateHostsEvent);
         processesList.addEventListener("change", updateStatusCombo);
@@ -36,6 +47,13 @@
         dispatchEvent(new Event("updateProcesses"));
       }
 
+      private function updateProcessStatusLabels(event:TranslationEvent):void {
+       processStatus = new ArrayCollection([
+        {label: resourceManager.getString("ispman", "New"), status: 'new'},
+        {label: resourceManager.getString("ispman", "In Session"), status: 'insession'},
+        {label: resourceManager.getString("ispman", "Error"), status: 'error'}
+        ]);
+      }
       private function updateProcessesEvent(event:Event):void {
         var operation : AbstractOperation=parentApplication.getOperation('processes.get_processes',
                                                                          updateProcessesArray);
@@ -92,7 +110,7 @@
 
       private function deleteProcess(event:Event):void {
         if ( ! processesList.selectedItem ) {
-          Alert.show("No process selected");
+          Alert.show(resourceManager.getString("ispman", "No process selected"));
           return;
         }
         var operation : AbstractOperation=parentApplication.getOperation('processes.delete_process',
@@ -107,7 +125,7 @@
       private function updateProcess(event:Event):void {
         var process:Object = processesList.selectedItem;
         if ( ! process ) {
-          Alert.show("No process selected");
+          Alert.show(resourceManager.getString("ispman", "No process selected"));
           return;
         }
 
@@ -127,25 +145,34 @@
 
     </mx:Script>
 
-    <mx:Panel width="100%" title="Processes Queue" creationComplete="creationComplete()"
+    <mx:Panel width="100%"
+              title='{resourceManager.getString("ispman", "Processes Queue")}'
+              creationComplete="creationComplete()"
               layout="vertical" id="processesListPanel" styleName="noPadding">
         <controls:RowColorDataGrid id="processesList" rowCount="1" width="100%"
                                    dataProvider="{processes}" rowColorFunction="styleFunction">
             <controls:columns>
-                <mx:DataGridColumn dataField="ispmanSession" headerText="Session"/>
+                <mx:DataGridColumn dataField="ispmanSession"
+                                   headerText='{resourceManager.getString("ispman", "Session")}'/>
                 <mx:DataGridColumn dataField="ispmanPid" headerText="PID"/>
-                <mx:DataGridColumn dataField="ispmanHostName" headerText="Host"/>
-                <mx:DataGridColumn dataField="ispmanDomain" headerText="Domain"/>
-                <mx:DataGridColumn dataField="ispmanProcess" headerText="Process"/>
-                <mx:DataGridColumn dataField="ispmanStatus" headerText="Status"/>
-                <mx:DataGridColumn dataField="ispmanUser" headerText="Created By"/>
+                <mx:DataGridColumn dataField="ispmanHostName"
+                                   headerText='{resourceManager.getString("ispman", "Host")}'/>
+                <mx:DataGridColumn dataField="ispmanDomain"
+                                   headerText='{resourceManager.getString("ispman", "Domain")}'/>
+                <mx:DataGridColumn dataField="ispmanProcess"
+                                   headerText='{resourceManager.getString("ispman", "Process")}'/>
+                <mx:DataGridColumn dataField="ispmanStatus"
+                                   headerText='{resourceManager.getString("ispman", "Status")}'/>
+                <mx:DataGridColumn dataField="ispmanUser"
+                                   headerText='{resourceManager.getString("ispman", "Created By")}'/>
             </controls:columns>
         </controls:RowColorDataGrid>
     </mx:Panel>
-    <mx:Panel width="100%" height="305" title="Process Details" layout="absolute"
-              id="processDetailsPanel">
+    <mx:Panel width="100%" height="305"
+              title='{resourceManager.getString("ispman", "Process Details")}'
+              layout="absolute" id="processDetailsPanel">
         <mx:Form id="processDetailsForm" defaultButton="{updateProcessButton}">
-            <mx:FormItem label="User:" id="ispmanUserItem">
+            <mx:FormItem label='{resourceManager.getString("ispman", "User:")}' id="ispmanUserItem">
                 <mx:TextInput id="ispmanUserInput" text="{processesList.selectedItem.ispmanUser}"/>
             </mx:FormItem>
             <!--
@@ -158,16 +185,16 @@
             <mx:FormItem label="PID:">
                 <mx:Label text="{processesList.selectedItem.ispmanPid}"/>
             </mx:FormItem>
-            <mx:FormItem label="Session:">
+            <mx:FormItem label='{resourceManager.getString("ispman", "Session:")}'>
                 <mx:Label text="{processesList.selectedItem.ispmanSession}"/>
             </mx:FormItem>
-            <mx:FormItem label="Status:">
+            <mx:FormItem label='{resourceManager.getString("ispman", "Status:")}'>
                 <mx:ComboBox id="ispmanStatusCombo" dataProvider="{processStatus}" enabled="false"/>
             </mx:FormItem>
-            <mx:FormItem label="Process:">
+            <mx:FormItem label='{resourceManager.getString("ispman", "Process:")}'>
                 <mx:Label text="{processesList.selectedItem.ispmanProcess}"/>
             </mx:FormItem>
-            <mx:FormItem label="Domain:">
+            <mx:FormItem label='{resourceManager.getString("ispman", "Domain:")}'>
                 <mx:Label text="{processesList.selectedItem.ispmanDomain}"/>
             </mx:FormItem>
             <mx:FormItem label="Hostname:">
@@ -177,9 +204,12 @@
         </mx:Form>
         <mx:ControlBar>
             <mx:Spacer width="100%"/>
-            <mx:Button id="deleteProcessButton" label="Delete Process" styleName="sensible"
-                       click="deleteProcess(event)"/>
-            <mx:Button id="updateProcessButton" label="Update Process" click="updateProcess(event)"/>
+            <mx:Button id="deleteProcessButton"
+                       label='{resourceManager.getString("ispman", "Delete Process")}'
+                       styleName="sensible" click="deleteProcess(event)"/>
+            <mx:Button id="updateProcessButton"
+                       label='{resourceManager.getString("ispman", "Update Process")}'
+                       click="updateProcess(event)"/>
         </mx:ControlBar>
     </mx:Panel>
 </mx:VBox>

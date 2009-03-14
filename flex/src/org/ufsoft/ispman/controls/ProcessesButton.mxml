@@ -20,7 +20,9 @@
       private var _operation       : AbstractOperation;
 
       private function creationComplete():void {
-        this.label = "Processes in Queue: ...";
+        this.label = resourceManager.getString(
+          "ispman", "Processes in Queue: {0}", ['...']);
+
         t = new Timer(TIMER_INTERVAL);
         t.addEventListener(TimerEvent.TIMER, checkProcesses);
         parentApplication.addEventListener(AuthenticationEvent.SUCESS, startTimer);
@@ -47,7 +49,8 @@
       }
 
       private function updateProcesses(event:ResultEvent):void {
-        this.label = "Processes in Queue: " + event.result;
+        this.label = resourceManager.getString(
+          "ispman", "Processes in Queue: {0}", [event.result]);
       }
     </mx:Script>
 </mx:Button>

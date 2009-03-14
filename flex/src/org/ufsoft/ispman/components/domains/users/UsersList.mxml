@@ -3,7 +3,7 @@
           xmlns:controls="org.ufsoft.ispman.controls.*"
           width="100%"
           height="100%"
-          title="Domain Users"
+          title='{resourceManager.getString("ispman", "Domain Users")}'
           creationComplete="creationComplete()"
           styleName="noPadding">
     <mx:Script>
@@ -71,10 +71,11 @@
                                dataProvider="{usersList}" rowColorFunction="styleFunction">
         <controls:columns>
             <mx:DataGridColumn dataField="uid" labelFunction="getUID" headerText="UID"/>
-            <mx:DataGridColumn dataField="cn" headerText="Name"/>
+            <mx:DataGridColumn dataField="cn"
+                               headerText='{resourceManager.getString("ispman", "Name")}'/>
             <mx:DataGridColumn dataField="mailLocalAddress" headerText="Local Mail Address"/>
-            <mx:DataGridColumn dataField="FTPStatus" headerText="FTP Status"/>
-            <mx:DataGridColumn dataField="FTPQuotaMBytes" headerText="FTP Quota"/>
+            <mx:DataGridColumn dataField="FTPStatus" headerText='{resourceManager.getString("ispman", "FTP Status")}'/>
+            <mx:DataGridColumn dataField="FTPQuotaMBytes" headerText='{resourceManager.getString("ispman", "FTP Qouta")}'/>
             <mx:DataGridColumn dataField="mailQuota" headerText="Mail Quota"/>
             <mx:DataGridColumn dataField="ispmanCreateTimestamp" labelFunction="formatTimestamp" headerText="Created"/>
         </controls:columns>

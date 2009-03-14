@@ -38,33 +38,45 @@
       }
 
     </mx:Script>
-    <mx:Panel height="100%" width="20%" title="Manage Domain">
-        <mx:Button label="Edit Domain" width="100%"/>
+    <mx:Panel height="100%" width="20%"
+              title='{resourceManager.getString("ispman", "Manage Domain")}'>
+        <mx:Button label='{resourceManager.getString("ispman", "Edit Domain")}' width="100%"/>
         <mx:Accordion width="100%" height="100%">
             <!-- Define each panel using a VBox container. -->
-            <mx:VBox label="Manage DNS" width="100%"
+            <mx:VBox label='{resourceManager.getString("ispman", "Manage DNS")}' width="100%"
                      paddingRight="5" paddingLeft="5" paddingTop="5" paddingBottom="5">
-                <mx:Button label="SOA Records" width="100%" click="showSOA(event)"/>
-                <mx:Button label="MX Records" width="100%"/>
-                <mx:Button label="NS Records" width="100%"/>
-                <mx:Button label="A Records" width="100%"/>
-                <mx:Button label="AAAA Records" width="100%"/>
-                <mx:Button label="TXT Records" width="100%"/>
+                <mx:Button label='{resourceManager.getString("ispman", "SOA Records")}'
+                           width="100%" click="showSOA(event)"/>
+                <mx:Button label='{resourceManager.getString("ispman", "MX Records")}'
+                           width="100%"/>
+                <mx:Button label='{resourceManager.getString("ispman", "NS Records")}'
+                           width="100%"/>
+                <mx:Button label='{resourceManager.getString("ispman", "A Records")}'
+                           width="100%"/>
+                <mx:Button label='{resourceManager.getString("ispman", "AAAA Records")}'
+                           width="100%"/>
+                <mx:Button label='{resourceManager.getString("ispman", "TXT Records")}'
+                           width="100%"/>
                 <mx:Button label="SOA Records" width="100%"/>
             </mx:VBox>
-            <mx:VBox label="Manage Users" width="100%"
-                     paddingRight="5" paddingLeft="5" paddingTop="5" paddingBottom="5">
-                <mx:Button label="Show Users" width="100%" click="showUsersList(event)"/>
+            <mx:VBox label='{resourceManager.getString("ispman", "Manage Users")}'
+                     width="100%" paddingRight="5" paddingLeft="5" paddingTop="5" paddingBottom="5">
+                <mx:Button label='{resourceManager.getString("ispman", "Show Users")}'
+                           width="100%" click="showUsersList(event)"/>
                 <mx:HBox width="100%">
                     <mx:TextInput id="searchUsersInput" width="100%"/>
-                    <mx:Button label="Search" paddingRight="2" paddingLeft="2"/>
+                    <mx:Button label='{resourceManager.getString("ispman", "Search")}'
+                               paddingRight="2" paddingLeft="2"/>
                 </mx:HBox>
             </mx:VBox>
-            <mx:VBox label="Manage Mailgroups" width="100%" paddingTop="10" paddingBottom="10">
+            <mx:VBox label='{resourceManager.getString("ispman", "Manage Mailgroups")}'
+                     width="100%" paddingTop="10" paddingBottom="10">
             </mx:VBox>
-            <mx:VBox label="Manage Web Users" width="100%" paddingTop="10" paddingBottom="10">
+            <mx:VBox label='{resourceManager.getString("ispman", "Manage Web Users")}'
+                     width="100%" paddingTop="10" paddingBottom="10">
             </mx:VBox>
-            <mx:VBox label="Manage Virtual Hosts" width="100%" paddingTop="10" paddingBottom="10">
+            <mx:VBox label='{resourceManager.getString("ispman", "Manage Virtual Hosts")}'
+                     width="100%" paddingTop="10" paddingBottom="10">
             </mx:VBox>
         </mx:Accordion>
     </mx:Panel>
