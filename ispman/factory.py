@@ -22,6 +22,8 @@ from pyamf import amf3
 from pyamf.remoting.gateway import expose_request
 from pyamf.remoting.gateway.twisted import TwistedGateway
 
+from babel.support import Translations
+
 from ispman.services import services
 from ispman.remoting.auth import AuthenticationNeeded
 
@@ -190,6 +192,18 @@ class ISPManFactory(Site):
             if not request.session:
                 request.getSession()
             request.factory = self
+
+            user = getattr(request.session, 'user', None)
+            locale = user and user.locale or 'en_US'
+            if getattr(request.session, 'locale', None) != locale:
+                request.session.locale = locale
+                request.session.translations = Translations(
+                    open(request.factory.config.locales.get(locale).get('path'),
+                         'rb')
+                )
+                request.session.touch()
+            del user, locale
+
             if service_request.method in ('login', 'get_translations',
                                           'get_locales'):
                 return
