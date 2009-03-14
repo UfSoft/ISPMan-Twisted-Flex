@@ -103,11 +103,14 @@
       private function sendForm():void {
         cookie.data.loginTypeIndex = loginTypeCombo.selectedIndex;
         cookie.data.languageComboIndex = languageCombo.selectedIndex;
-        cookie.data.username = user.username;
+        cookie.data.username = username.text;
         cookie.data.locale = Locale.getInstance().getLocale();
         cookie.flush();
         user = new AuthenticatedUser(
-          username.text, password.text, loginTypeCombo.selectedItem.type);
+          username.text,
+          password.text,
+          loginTypeCombo.selectedItem.type,
+          languageCombo.selectedItem.locale);
         dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SEND, user));
       }
 
