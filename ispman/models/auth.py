@@ -18,4 +18,11 @@ class AuthenticatedUser(object):
         self.username = data.get('username').encode('utf-8')
         self.password = data.get('password').encode('utf-8')
         self.login_type = data.get('loginType')
-        self.language = data.get('language', 'en_US')
+        self.locale = data.get('locale', 'en_US')
+
+    def __repr__(self):
+        # Late import
+        from ispman.remoting.auth import ROLES_MAP
+        return "<%s %s(%s) - %s>" % (self.__class__.__name__,
+                                     self.username, ROLES_MAP[self.login_type],
+                                     self.locale)
