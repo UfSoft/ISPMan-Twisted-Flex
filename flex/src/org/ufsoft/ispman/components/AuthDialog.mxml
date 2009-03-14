@@ -22,44 +22,37 @@
       import org.ufsoft.ispman.events.AuthenticationEvent;
       import org.ufsoft.ispman.events.TranslationEvent;
 
-      private var loginType     : int=1;
-
       //[Bindable]
       public var user           : AuthenticatedUser;
-
 
       [Bindable]
       public var languagesArray : ArrayCollection;
 
-      protected function creationComplete():void {
+      private var cookie : SharedObject = SharedObject.getLocal("ISPManCP");
 
+      protected function creationComplete():void {
         PopUpManager.centerPopUp(this); // center the popup
 
-        // Listen to key events to enable or not the authenticate button
-        this.addEventListener(KeyboardEvent.KEY_UP, submit_Ok);
+        // Choose the right Login Type
+        loginTypeCombo.selectedIndex = cookie.data.loginTypeIndex || 0;
+        // Set stored username if possible
+        username.text = cookie.data.username || '';
 
-        // listen to login type changes
-        loginTypeCombo.addEventListener("change", loginTypeSelect);
+        // Listen to key events to enable or not the authenticate button
+        addEventListener(KeyboardEvent.KEY_UP, submit_Ok);
 
         // listen to authenticate button cliks to submit or Enter-key presses
-        authButton.addEventListener( MouseEvent.CLICK, submitForm );
+        authButton.addEventListener( MouseEvent.CLICK, submitFormMouseClick );
         authForm.addEventListener( KeyboardEvent.KEY_DOWN, submitFormEnterKey );
 
-        // Re-login? Select the correct Login type
-        if ( user.username != '' ) {
-          authButton.enabled = true;
-          for ( var i:int=0; i&lt;loginTypeArray.source.length; i++ ) {
-            if ( loginTypeArray.getItemAt(i).type ==  user.loginType ) {
-              loginTypeCombo.selectedIndex = i;
-              break;
-            }
-          }
+        if ( username.text != '' ) {
+          // Set focus on password
           password.setFocus();
         } else {
           // Set focus on username
           username.setFocus();
         }
-        //Firebug.debug(this);
+
         var operation: AbstractOperation=parentApplication.getOperation(
           'locales.get_locales',
           getLanguagesSucess);
@@ -75,21 +68,6 @@
               break;
             }
           }
-      }
-
-      private function getLanguagesFailure(event:FaultEvent):void {
-        // Hardcoded Array. Might be missing some translations.
-        languagesArray = new ArrayCollection([
-          {label: 'English', locale: 'en_US'},
-          {label: 'Português', locale: 'pt_PT'},
-        ]);
-      }
-
-      /*
-       * Function to change the login type
-       */
-      private function loginTypeSelect(event:Event):void {
-        loginType = ComboBox(event.target).selectedItem.type;
       }
 
       // Function to check if the authentication button should be enabled or not
@@ -110,16 +88,27 @@
       }
 
       // Fire the submit form event
-      private function submitForm(evt:MouseEvent):void {
-        user = new AuthenticatedUser(username.text, password.text, loginType);
-        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SEND, user));
+      private function submitFormMouseClick(event:MouseEvent):void {
+        if ( authButton.enabled ) {
+          sendForm();
+        }
       }
 
       private function submitFormEnterKey(evt:KeyboardEvent):void {
         if ( evt.keyCode == 13 &amp;&amp; authButton.enabled ) {
-        user = new AuthenticatedUser(username.text, password.text, loginType);
-        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SEND, user));
+          sendForm();
         }
+      }
+
+      private function sendForm():void {
+        cookie.data.loginTypeIndex = loginTypeCombo.selectedIndex;
+        cookie.data.languageComboIndex = languageCombo.selectedIndex;
+        cookie.data.username = user.username;
+        cookie.data.locale = Locale.getInstance().getLocale();
+        cookie.flush();
+        user = new AuthenticatedUser(
+          username.text, password.text, loginTypeCombo.selectedItem.type);
+        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SEND, user));
       }
 
       private function languageSelectionChanged():void {
@@ -131,16 +120,15 @@
     <mx:Form id="authForm">
         <mx:FormItem id="usernameItem"
                      label='{resourceManager.getString("ispman", "Username:")}'>
-            <mx:TextInput id="username" text="{user.username}"/>
+            <mx:TextInput id="username"/>
         </mx:FormItem>
         <mx:FormItem id="passwordItem"
                      label='{resourceManager.getString("ispman", "Password:")}'>
             <mx:TextInput id="password" displayAsPassword="true"/>
         </mx:FormItem>
-        <mx:FormItem id="loginTypeItem"
+        <mx:FormItem id="loginTypeFormItem"
                      label='{resourceManager.getString("ispman", "Login as:")}'>
-            <mx:ComboBox id="loginTypeCombo"
-                         labelField="label" change="loginTypeSelect(event)">
+            <mx:ComboBox id="loginTypeCombo" labelField="label">
                 <mx:ArrayCollection id="loginTypeArray">
                     <mx:Object label='{resourceManager.getString("ispman", "Administrator")}' type="1"/>
                     <mx:Object label='{resourceManager.getString("ispman", "Reseller")}' type="2"/>

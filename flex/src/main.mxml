@@ -42,22 +42,24 @@
       import org.ufsoft.ispman.components.processes.ProcessesOverview;
 
       // VARS
-      private var authDialog    : AuthDialog;
-      private var overview      : Overview;
-      private var manageDomain  : ManageDomain;
-      private var user          : AuthenticatedUser;
-      private var _currentChild : DisplayObject;
-      private var processesOverview: ProcessesOverview;
+      private var authDialog        : AuthDialog;
+      private var overview          : Overview;
+      private var manageDomain      : ManageDomain;
+      private var user              : AuthenticatedUser;
+      private var _currentChild     : DisplayObject;
+      private var processesOverview : ProcessesOverview;
+      public var cookie             : SharedObject;
 
       [Bindable]
-      private var availableDomains   : ArrayCollection;
+      private var availableDomains  : ArrayCollection;
 
-      private var locale:Locale
+      private var locale            : Locale;
 
       private function setupInitialLocale(event:FlexEvent):void {
+        cookie = SharedObject.getLocal("ISPManCP");
         locale = Locale.getInstance()
         locale.addEventListener(TranslationEvent.LOADED, updateComboPrompt)
-        locale.load('en_US');
+        locale.load(cookie.data.locale || 'en_US');
       }
 
       private function creationComplete(event:FlexEvent) : void {
