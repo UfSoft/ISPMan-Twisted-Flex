@@ -72,8 +72,16 @@
         addEventListener(AuthenticationEvent.SUCESS, displayOverview);
 
         // Test with a fake user for existing session
-        dispatchEvent(new AuthenticationEvent(AuthenticationEvent.SEND,
-                                              new AuthenticatedUser('', '', 1)));
+        dispatchEvent(new AuthenticationEvent(
+          AuthenticationEvent.SEND,
+          new AuthenticatedUser(
+            cookie.data.username || '',
+            '',
+            cookie.data.loginType || 1,
+            cookie.data.locale || 'en_US'
+            )
+          )
+        );
       }
 
       private function AuthenticationNeeded(event:Event) : void {
@@ -98,7 +106,9 @@
         if (event.fault.faultCode == 'AuthenticationNeeded') {
           dispatchEvent(new AuthenticationEvent(AuthenticationEvent.NEEDED));
         } else {
-          var errorMsg : String="Authentication Failed " + event.fault.faultCode;
+          var errorMsg : String=resourceManager.getString(
+            "ispman", "Authentication Failed {0}", [event.fault.faultCode]
+          );
           Alert.show(event.fault.faultDetail, errorMsg);
         }
       }
@@ -221,7 +231,8 @@
                          change="domainChange(event)"/>
             <mx:Spacer width="100%"/>
             <controls:ProcessesButton click="loadProcessesOverview(event)"/>
-            <mx:Button id="ispman_home" label="ISPMan Home"/>
+            <mx:Button id="ispman_home"
+                       label='{resourceManager.getString("ispman", "ISPMan Site")}'/>
             <mx:Button id="logout"
                        label='{resourceManager.getString("ispman", "Logout")}'/>
         </mx:HBox>
