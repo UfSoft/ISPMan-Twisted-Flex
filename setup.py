@@ -38,7 +38,9 @@ setup(name=ispman.__package__,
         ],
         'flex': [
             ('**.as', 'ispman.utils:extract_actionscript', None),
-            ('**.mxml', 'ispman.utils:extract_mxml', None),
+            ('**.mxml', 'ispman.utils:extract_mxml', {
+                'attrs': [
+                    u'label', u'text', u'title', u'headerText', u'prompt']}),
         ]
       },
       entry_points = {
