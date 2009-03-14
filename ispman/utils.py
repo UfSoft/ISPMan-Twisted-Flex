@@ -113,19 +113,15 @@ class MXMLParser(object):
 def extract_mxml(fileobj, keywords, comment_tags, options):
     for elem, pos in MXMLParser(fileobj).parse():
         if elem.tag == 'mx:Script':
-            for _, funcname, message, comments in \
+            for lineno, funcname, message, comments in \
                             extract_javascript(StringIO(elem.text), keywords,
                                                  comment_tags, options):
-                yield pos[0], funcname, message, comments
+                yield pos[0]+lineno, funcname, message, comments
         else:
-            if elem.get(u'label'):
-                attrib = u'label'
-            elif u'text' in elem.attrib:
-                attrib = u'text'
-            elif u'title' in elem.attrib:
-                attrib = u'title'
-            elif u'prompt' in elem.attrib:
-                attrib = u'prompt'
+            attrib = None
+            for attr in options.get('attrs', []):
+                if elem.get(attr):
+                    attrib = attr
             if attrib:
                 if elem.attrib[attrib].startswith('{') and \
                     elem.attrib[attrib].endswith('}'):
