@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ISPManCP 0.5\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2009-03-15 15:43+0000\n"
+"POT-Creation-Date: 2009-03-15 15:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,11 +29,11 @@ msgstr ""
 msgid "Overview"
 msgstr ""
 
-#: flex/src/main.mxml:246
+#: flex/src/main.mxml:245
 msgid "ISPMan Site"
 msgstr ""
 
-#: flex/src/main.mxml:248
+#: flex/src/main.mxml:247
 msgid "Logout"
 msgstr ""
 
@@ -189,6 +189,10 @@ msgstr ""
 
 #: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:84
 msgid "Created On"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:90
+msgid "Filter"
 msgstr ""
 
 #: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:94

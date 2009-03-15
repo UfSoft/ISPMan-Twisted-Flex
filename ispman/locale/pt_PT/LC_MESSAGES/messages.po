@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ISPManCP 0.5\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2009-03-15 15:43+0000\n"
-"PO-Revision-Date: 2009-03-15 15:40+0000\n"
+"POT-Creation-Date: 2009-03-15 15:57+0000\n"
+"PO-Revision-Date: 2009-03-15 15:57+0000\n"
 "Last-Translator: Pedro Algarvio <ufs@ufsoft.org>\n"
 "Language-Team: pt <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -29,11 +29,11 @@ msgstr "Seleccione Domínio"
 msgid "Overview"
 msgstr "Detalhes"
 
-#: flex/src/main.mxml:246
+#: flex/src/main.mxml:245
 msgid "ISPMan Site"
 msgstr "Site ISPMan"
 
-#: flex/src/main.mxml:248
+#: flex/src/main.mxml:247
 msgid "Logout"
 msgstr "Sair"
 
@@ -190,6 +190,10 @@ msgstr "Quota Mail"
 #: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:84
 msgid "Created On"
 msgstr "Criado Em"
+
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:90
+msgid "Filter"
+msgstr "Filtro"
 
 #: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:94
 msgid "Delete User"

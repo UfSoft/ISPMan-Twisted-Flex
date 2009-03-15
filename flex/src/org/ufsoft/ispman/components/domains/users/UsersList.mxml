@@ -85,7 +85,7 @@
         </controls:columns>
     </controls:RowColorDataGrid>
     <mx:ControlBar>
-        <mx:FormItem label="Filter">
+        <mx:FormItem label='{resourceManager.getString("ispman", "Filter")}'>
             <mx:TextInput/>
         </mx:FormItem>
         <mx:Spacer width="100%"/>
