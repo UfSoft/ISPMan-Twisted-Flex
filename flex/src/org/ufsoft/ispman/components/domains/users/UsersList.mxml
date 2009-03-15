@@ -33,10 +33,9 @@
       }
 
       private function loadUsers(event:Event):void {
-        var operation : AbstractOperation=parentApplication.getOperation('domains.get_users',
-                                                                         updateUsers);
+        var operation : AbstractOperation=parentApplication.getOperation(
+          'domains.get_users', updateUsers);
         operation.send(domain);
-        //dispatchEvent(new Event("updateUsers"));
       }
 
       private function updateUsers(event:ResultEvent):void {
