@@ -55,14 +55,11 @@
       }
 
       public function getUID(item:Object, column:DataGridColumn):String {
-        //Alert.show('1:' + item.uid[0]);
-        //Alert.show('2:' + item.getUID());
         return item.uid[0] + '\n' + item.uid[1];
       }
 
       public function formatTimestamp(item:Object, column:DataGridColumn):String {
         var date:Date = new Date(item.ispmanCreateTimestamp*1000);
-        //return date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
         return date.toString();
       }
 
