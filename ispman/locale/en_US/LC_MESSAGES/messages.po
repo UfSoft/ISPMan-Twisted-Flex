@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ISPManCP 0.5\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2009-03-14 20:21+0000\n"
+"POT-Creation-Date: 2009-03-15 15:43+0000\n"
 "PO-Revision-Date: 2009-03-08 16:51+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -17,23 +17,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.0dev-r467\n"
 
-#: flex/src/main.mxml:318
+#: flex/src/main.mxml:332
 msgid "Authentication Failed {0}"
 msgstr ""
 
-#: flex/src/main.mxml:367
+#: flex/src/main.mxml:381
 msgid "Choose Domain"
 msgstr ""
 
-#: flex/src/main.mxml:227
+#: flex/src/main.mxml:237
 msgid "Overview"
 msgstr ""
 
-#: flex/src/main.mxml:235
+#: flex/src/main.mxml:246
 msgid "ISPMan Site"
 msgstr ""
 
-#: flex/src/main.mxml:237
+#: flex/src/main.mxml:248
 msgid "Logout"
 msgstr ""
 
@@ -80,6 +80,35 @@ msgstr ""
 
 #: flex/src/org/ufsoft/ispman/components/Overview.mxml:47
 msgid "ISP Summary"
+msgstr ""
+
+#. "s" is for seconds if you wish to translate
+#: flex/src/org/ufsoft/ispman/components/ProcessesMenuBox.mxml:144
+msgid "30s"
+msgstr ""
+
+#. "s" is for seconds if you wish to translate
+#: flex/src/org/ufsoft/ispman/components/ProcessesMenuBox.mxml:146
+msgid "60s"
+msgstr ""
+
+#. "s" is for seconds if you wish to translate
+#: flex/src/org/ufsoft/ispman/components/ProcessesMenuBox.mxml:148
+msgid "90s"
+msgstr ""
+
+#. "s" is for seconds if you wish to translate
+#: flex/src/org/ufsoft/ispman/components/ProcessesMenuBox.mxml:150
+msgid "120s"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/ProcessesMenuBox.mxml:175
+#: flex/src/org/ufsoft/ispman/components/ProcessesMenuBox.mxml:101
+msgid "Processes in Queue: {0}"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/ProcessesMenuBox.mxml:105
+msgid "Commit Session"
 msgstr ""
 
 #: flex/src/org/ufsoft/ispman/components/domains/ManageDomain.mxml:43
@@ -146,15 +175,31 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:77
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:78
 msgid "FTP Status"
 msgstr ""
 
-#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:78
-msgid "FTP Qouta"
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:80
+msgid "FTP Quota"
 msgstr ""
 
-#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:92
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:82
+msgid "Mail Qouta"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:84
+msgid "Created On"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:94
+msgid "Delete User"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:97
+msgid "Edit User"
+msgstr ""
+
+#: flex/src/org/ufsoft/ispman/components/domains/users/UsersList.mxml:99
 msgid "Domain Users"
 msgstr ""
 
@@ -232,11 +277,6 @@ msgstr ""
 
 #: flex/src/org/ufsoft/ispman/components/processes/ProcessesOverview.mxml:214
 msgid "Process Details"
-msgstr ""
-
-#: flex/src/org/ufsoft/ispman/controls/ProcessesButton.mxml:75
-#: flex/src/org/ufsoft/ispman/controls/ProcessesButton.mxml:104
-msgid "Processes in Queue: {0}"
 msgstr ""
 
 #: ispman/remoting/auth.py:123

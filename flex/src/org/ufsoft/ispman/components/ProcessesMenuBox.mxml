@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
+         creationComplete="creationComplete()">
+    <mx:Script>
+      import flash.utils.Timer;
+      import flash.events.TimerEvent;
+      import mx.controls.Alert;
+      import mx.collections.ArrayCollection;
+      import mx.resources.ResourceManager;
+
+      import mx.rpc.AbstractOperation;
+      import mx.rpc.events.FaultEvent;
+      import mx.rpc.events.ResultEvent;
+
+
+      import org.ufsoft.ispman.i18n.Locale;
+      import org.ufsoft.ispman.events.LoadDataEvent;
+      import org.ufsoft.ispman.events.TranslationEvent;
+      import org.ufsoft.ispman.events.AuthenticationEvent;
+
+      import net.zengrong.logging.Firebug;
+
+      private var timer             : Timer;
+      private var intervalsArray    : Array;
+      private var locale            : Locale;
+      private var cookie            : SharedObject = SharedObject.getLocal("ISPManCP");
+      [Bindable]
+      private var intervalsArrayCol: ArrayCollection;
+
+
+      private function creationComplete():void {
+        locale = Locale.getInstance();
+        locale.addEventListener(TranslationEvent.LOADED, createTranslatedArray);
+
+        timer = new Timer(cookie.data.updateInterval || 30000);
+        timer.addEventListener(TimerEvent.TIMER, checkProcesses);
+        parentApplication.addEventListener(AuthenticationEvent.SUCESS, startTimer);
+        parentApplication.addEventListener(AuthenticationEvent.FAILURE, stopTimer);
+        parentApplication.addEventListener(AuthenticationEvent.NEEDED, stopTimer);
+        parentApplication.addEventListener("ConnectionLost", stopChecking);
+        parentApplication.addEventListener(AuthenticationEvent.SUCESS, checkProcesses);
+        Firebug.debug("ProcessButton Started!");
+      }
+
+      private function createTranslatedArray(event:TranslationEvent):void {
+        intervalsArray = new Array(
+          // : "s" is for seconds if you wish to translate
+          {interval: 30000, label: resourceManager.getString("ispman", "30s")},
+          // : "s" is for seconds if you wish to translate
+          {interval: 60000, label: resourceManager.getString("ispman", "60s")},
+          // : "s" is for seconds if you wish to translate
+          {interval: 90000, label: resourceManager.getString("ispman", "90s")},
+          // : "s" is for seconds if you wish to translate
+          {interval: 120000, label: resourceManager..getString("ispman", "120s")}
+        );
+        intervalsArrayCol = new ArrayCollection(intervalsArray);
+        intervalsCombo.selectedIndex = cookie.data.updateIntervalIndex || 0;
+      }
+
+      private function startTimer(event:AuthenticationEvent):void {
+        timer.start();
+      }
+
+      private function stopChecking(event:Event):void {
+        timer.stop();
+      }
+
+      private function stopTimer(event:AuthenticationEvent):void {
+        timer.stop();
+      }
+
+      private function checkProcesses(event:Event=null):void {
+        var operation:AbstractOperation = parentApplication.getOperation('processes.count',
+                                                                         updateProcesses);
+        operation.send();
+      }
+
+      private function updateProcesses(event:ResultEvent):void {
+        processesButton.label = resourceManager.getString(
+          "ispman", "Processes in Queue: {0}", [event.result]);
+      }
+
+      private function updateTimerDelay():void {
+        var delay:int = intervalsCombo.selectedItem.interval as int;
+        timer.delay = delay;
+        cookie.data.updateInterval = delay;
+        cookie.data.updateIntervalIndex = intervalsCombo.selectedIndex;
+        cookie.flush();
+      }
+
+      private function loadProcessesOverview(event:Event):void {
+        parentApplication.dispatchEvent(new Event("LoadProcesses"));
+      }
+
+      private function commitSession(event:Event):void {
+        // Commit the session's processes, and issue a reload of them
+        parentApplication.dispatchEvent(new Event("LoadProcesses"));
+      }
+    </mx:Script>
+    <mx:Button id="processesButton" click="loadProcessesOverview(event)"
+               label='{resourceManager.getString("ispman", "Processes in Queue: {0}", ["..."])}'/>
+    <mx:ComboBox id="intervalsCombo" change="updateTimerDelay()"
+                 labelField="label" dataProvider="{intervalsArrayCol}"/>
+    <mx:Button click="commitSession(event)"
+               label='{resourceManager.getString("ispman", "Commit Session")}'/>
+    <mx:Spacer width="20"/>
+</mx:HBox>

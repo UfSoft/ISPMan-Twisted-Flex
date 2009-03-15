@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
-                xmlns:controls="org.ufsoft.ispman.controls.*"
+                xmlns:components="org.ufsoft.ispman.components.*"
                 layout="absolute"
                 label="ISPMan"
                 pageTitle="ISPMan"
@@ -55,6 +55,9 @@
 
       private var locale            : Locale;
 
+      [Event(name="ConnectionLost", type="Event")]
+      [Event(name="LoadProcesses", type="Event")]
+
       private function setupInitialLocale(event:FlexEvent):void {
         cookie = SharedObject.getLocal("ISPManCP");
         locale = Locale.getInstance()
@@ -70,6 +73,7 @@
         addEventListener(LoadDataEvent.LOAD, loadDataForEvent);
         addEventListener(AuthenticationEvent.SEND, authenticate);
         addEventListener(AuthenticationEvent.SUCESS, displayOverview);
+        addEventListener("LoadProcesses", loadProcessesOverview);
 
         // Test with a fake user for existing session
         dispatchEvent(new AuthenticationEvent(
@@ -213,6 +217,12 @@
       protected function onServiceFault(event : FaultEvent) : void {
         if (event.fault.faultCode == 'AuthenticationNeeded') {
           dispatchEvent(new AuthenticationEvent(AuthenticationEvent.NEEDED));
+        } else if (event.fault.faultCode == 'Client.Error.MessageSent') {
+            dispatchEvent(new Event("ConnectionLost"));
+            Alert.show("Problem communicating with server!");
+        } else if (event.fault.faultCode == 'Channel.Call.Failed') {
+            dispatchEvent(new Event("ConnectionLost"));
+            Alert.show("Problem communicating with server!");
         } else {
           var errorMsg : String=event.fault.faultCode;
           Alert.show(event.fault.faultDetail, errorMsg);
@@ -230,7 +240,7 @@
                          labelField="label" dataProvider="{availableDomains}"
                          change="domainChange(event)"/>
             <mx:Spacer width="100%"/>
-            <controls:ProcessesButton click="loadProcessesOverview(event)"/>
+            <components:ProcessesMenuBox/>
             <mx:Button id="ispman_home"
                        label='{resourceManager.getString("ispman", "ISPMan Site")}'/>
             <mx:Button id="logout"

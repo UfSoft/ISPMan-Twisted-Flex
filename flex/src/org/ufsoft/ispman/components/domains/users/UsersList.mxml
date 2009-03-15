@@ -74,10 +74,14 @@
             <mx:DataGridColumn dataField="cn"
                                headerText='{resourceManager.getString("ispman", "Name")}'/>
             <mx:DataGridColumn dataField="mailLocalAddress" headerText="Local Mail Address"/>
-            <mx:DataGridColumn dataField="FTPStatus" headerText='{resourceManager.getString("ispman", "FTP Status")}'/>
-            <mx:DataGridColumn dataField="FTPQuotaMBytes" headerText='{resourceManager.getString("ispman", "FTP Qouta")}'/>
-            <mx:DataGridColumn dataField="mailQuota" headerText="Mail Quota"/>
-            <mx:DataGridColumn dataField="ispmanCreateTimestamp" labelFunction="formatTimestamp" headerText="Created"/>
+            <mx:DataGridColumn dataField="FTPStatus"
+                               headerText='{resourceManager.getString("ispman", "FTP Status")}'/>
+            <mx:DataGridColumn dataField="FTPQuotaMBytes"
+                               headerText='{resourceManager.getString("ispman", "FTP Quota")}'/>
+            <mx:DataGridColumn dataField="mailQuota"
+                               headerText='{resourceManager.getString("ispman", "Mail Qouta")}'/>
+            <mx:DataGridColumn dataField="ispmanCreateTimestamp" labelFunction="formatTimestamp"
+                               headerText='{resourceManager.getString("ispman", "Created On")}'/>
         </controls:columns>
     </controls:RowColorDataGrid>
     <mx:ControlBar>
@@ -85,8 +89,11 @@
             <mx:TextInput/>
         </mx:FormItem>
         <mx:Spacer width="100%"/>
-        <mx:Button id="deleteUserButton" label="Delete User" styleName="sensible"
+        <mx:Button id="deleteUserButton"  styleName="sensible"
+                   label='{resourceManager.getString("ispman", "Delete User")}'
                    click=""/>
-        <mx:Button id="editUserButton" label="Edit User" click=""/>
+        <mx:Button id="editUserButton"
+                   label='{resourceManager.getString("ispman", "Edit User")}'
+                   click=""/>
     </mx:ControlBar>
 </mx:Panel>
