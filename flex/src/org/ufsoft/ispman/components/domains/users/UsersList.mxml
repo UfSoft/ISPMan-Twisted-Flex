@@ -43,14 +43,13 @@
         usersList = event.result as ArrayCollection;
       }
 
-      private function styleFunction(item:Object, rowIndex:int,
-                                     dataIndex:int, color:uint):uint {
-        /*if ( item.ispmanStatus == 'new' ) {
-          return 0xCCFFCC;
-        }
-        if ( item.ispmanStatus == 'error') {
-          return 0xFFCCCC;
-        }*/
+      private function styleFunction(
+        item:Object,
+        rowIndex:int,
+        dataIndex:int,
+        color:uint
+        ):uint
+      {
         return color;
       }
 
